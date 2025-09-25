@@ -50,7 +50,7 @@
             android:layout_marginBottom="16dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxBackgroundColor="@color/white"
-            app:boxCornerRadius="12dp">
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailInput"
@@ -70,7 +70,6 @@
             android:layout_marginBottom="24dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxBackgroundColor="@color/white"
-            app:boxCornerRadius="12dp"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/colorPrimary">
 
