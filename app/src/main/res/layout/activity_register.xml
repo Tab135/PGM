@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/bg_gradient"
     android:padding="24dp"
-    tools:context=".RegisterActivity">
+    tools:context=".view.RegisterActivity">
 
     <!-- Header Section -->
     <LinearLayout
@@ -25,13 +26,6 @@
             android:textSize="28sp"
             android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Join us to get started"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"/>
     </LinearLayout>
 
     <!-- Form Section -->
@@ -48,8 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxBackgroundColor="@color/white"
-            >
+            app:boxBackgroundColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameInput"
@@ -67,8 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxBackgroundColor="@color/white"
-            >
+            app:boxBackgroundColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailInput"
@@ -88,7 +80,6 @@
             android:layout_marginBottom="24dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxBackgroundColor="@color/white"
-
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/colorPrimary">
 
@@ -128,7 +119,6 @@
             android:textAllCaps="false"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
     </LinearLayout>
