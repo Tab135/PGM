@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.example.pgm.R
 import com.example.pgm.view.MainActivity
 import com.example.pgm.model.Database.UserDatabaseHelper
+import com.example.pgm.view.Comic.ComicListActivity
 import com.example.pgm.view.LoginActivity
 import com.example.pgm.view.RegisterActivity
 
@@ -35,13 +36,15 @@ class LoginController(private val context: Context, private val view: View) {
         }
 
         if (databaseHelper.checkUser(email, pass)) {
-            context.startActivity(Intent(context, MainActivity::class.java))
+            // ✅ Redirect to Comic List after login
+            context.startActivity(Intent(context, ComicListActivity::class.java))
             Toast.makeText(context, "Login successfully", Toast.LENGTH_SHORT).show()
             (context as? LoginActivity)?.finish()
         } else {
             Toast.makeText(context, "Invalid email or password", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     fun goToRegister() {
         context.startActivity(Intent(context, RegisterActivity::class.java))

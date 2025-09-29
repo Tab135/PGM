@@ -18,11 +18,14 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
         const val COLUMN_NAME = "name"
 
         // Comics table
-        const val TABLE_COMICS = "comic"
+        const val TABLE_COMICS = "comics"
         const val COLUMN_ID = "_id"
-        const val COLUMN_TITLE = "book_title"
-        const val COLUMN_AUTHOR = "book_author"
-        const val COLUMN_PAGES = "book_pages"
+        const val COLUMN_TITLE = "title"
+        const val COLUMN_AUTHOR = "author"
+        const val COLUMN_PAGES = "pages"
+        const val COLUMN_LOCAL_PATH = "local_path"
+        const val COLUMN_REMOTE_URL = "remote_url"
+        const val COLUMN_IMAGE_URL = "image_url"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -39,8 +42,11 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
             CREATE TABLE $TABLE_COMICS (
                 $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COLUMN_TITLE TEXT NOT NULL,
-                $COLUMN_AUTHOR TEXT NOT NULL,
-                $COLUMN_PAGES INTEGER NOT NULL
+                $COLUMN_AUTHOR TEXT,
+                $COLUMN_PAGES INTEGER,
+                $COLUMN_LOCAL_PATH TEXT,
+                $COLUMN_REMOTE_URL TEXT,
+                $COLUMN_IMAGE_URL TEXT
             )
         """.trimIndent()
         db?.execSQL(createComicsTable)
