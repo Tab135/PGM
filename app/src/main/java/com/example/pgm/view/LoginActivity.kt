@@ -35,4 +35,5 @@ class LoginActivity : AppCompatActivity() {
         )
         LoginController(this, findViewById(R.id.loginContainer))
     }
+
 }

@@ -33,7 +33,10 @@ class RegisterController(private val context: Context, private val view: View) {
             Toast.makeText(context, "All fields must be filled", Toast.LENGTH_SHORT).show()
             return
         }
-
+        if(!isValidEmailAndroid(email))
+        {
+            Toast.makeText(context,"The email must have the back as @example.com", Toast.LENGTH_SHORT).show()
+        }
         if (!databaseHelper.checkEmail(email)) {
             val user = User(email = email, password = pass, name = userName)
             val success = databaseHelper.addUser(user)
@@ -48,4 +51,8 @@ class RegisterController(private val context: Context, private val view: View) {
             Toast.makeText(context, "Registration failed", Toast.LENGTH_SHORT).show()
         }
     }
+    private fun isValidEmailAndroid(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
 }
