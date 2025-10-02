@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.Comic.ComicListActivity" />
+        <activity android:name=".view.Comic.ChapterListActivity" />
         <activity
             android:name=".view.MainActivity"
             android:exported="false"/>

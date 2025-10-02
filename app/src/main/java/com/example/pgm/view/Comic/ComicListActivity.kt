@@ -27,7 +27,7 @@ class ComicListActivity : AppCompatActivity() {
         val comics = comicController.getAllComics()
 
         adapter = ComicAdapter(comics) { comic ->
-            val intent = Intent(this, ComicViewerActivity::class.java)
+            val intent = Intent(this, ChapterListActivity::class.java)
             intent.putExtra("comicId", comic.id)
             startActivity(intent)
         }
