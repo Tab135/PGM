@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/btnProfile"
+        android:icon="@drawable/ic_person"
+        android:iconTint="@color/white"
+        android:title="Profile"
+        app:showAsAction="always" />
+</menu>

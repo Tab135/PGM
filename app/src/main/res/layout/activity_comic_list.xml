@@ -3,21 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
->
+    android:layout_height="match_parent">
 
-    <!-- App Bar with Material Design 3 -->
+    <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="0dp">
+        android:background="?attr/colorPrimary"
+        app:elevation="4dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="My Comics" />
+            app:title="My Comics"
+            app:titleTextColor="@color/white">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnProfile"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:icon="@drawable/ic_person"
+                app:iconTint="@color/white" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <!-- Search Bar -->
         <com.google.android.material.search.SearchBar
@@ -27,7 +40,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
-            android:hint="Search comics..."></com.google.android.material.search.SearchBar>
+            android:hint="Search comics..." />
 
         <!-- Filter Chips -->
         <HorizontalScrollView
@@ -72,7 +85,7 @@
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Favorites"></com.google.android.material.chip.Chip>
+                    android:text="Favorites" />
 
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
@@ -110,7 +123,7 @@
                     android:padding="16dp"
                     android:weightSum="3">
 
-                    <!-- Total Comics -->
+                    <!-- Total -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -185,7 +198,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
+            <!-- Section Header -->
             <LinearLayout
                 android:id="@+id/sectionHeader"
                 android:layout_width="0dp"
@@ -248,6 +261,7 @@
                 <ImageView
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:src="@drawable/ic_person"
                     android:alpha="0.5" />
 
                 <TextView
@@ -264,15 +278,19 @@
                     android:layout_marginTop="8dp"
                     android:text="Start adding comics to your collection"
                     android:textSize="14sp" />
-
             </LinearLayout>
 
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.core.widget.NestedScrollView>
 
     <!-- Floating Action Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddComic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Add Comic"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

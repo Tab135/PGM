@@ -83,6 +83,15 @@
                 android:drawablePadding="8dp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/forgotPasswordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="Forgot Password?"
+            android:textSize="14sp"
+            android:textColor="@color/blue"
+            android:textStyle="bold"/>
 
         <!-- Login Button -->
         <Button
@@ -109,6 +118,8 @@
             android:textColor="#EDD36B"
             android:textSize="16sp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+
 
     </LinearLayout>
 
