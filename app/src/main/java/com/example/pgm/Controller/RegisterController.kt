@@ -36,6 +36,7 @@ class RegisterController(private val context: Context, private val view: View) {
         if(!isValidEmailAndroid(email))
         {
             Toast.makeText(context,"The email must have the back as @example.com", Toast.LENGTH_SHORT).show()
+            return
         }
         if (!databaseHelper.checkEmail(email)) {
             val user = User(email = email, password = pass, name = userName)
