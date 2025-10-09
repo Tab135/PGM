@@ -57,31 +57,31 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
                 $COLUMN_TITLE TEXT NOT NULL,
                 $COLUMN_AUTHOR TEXT,
                 $COLUMN_PAGES INTEGER,
-                $COLUMN_LOCAL_PATH TEXT,
-                $COLUMN_REMOTE_URL TEXT,
                 $COLUMN_IMAGE_URL TEXT
             )
         """.trimIndent()
         db?.execSQL(createComicsTable)
 
         val createChaptersTable = """
-            CREATE TABLE $TABLE_CHAPTERS (
-                $COLUMN_CHAPTER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COLUMN_COMIC_ID INTEGER NOT NULL,
-                $COLUMN_CHAPTER_NUMBER INTEGER NOT NULL,
-                $COLUMN_CHAPTER_TITLE TEXT NOT NULL,
-                $COLUMN_THUMBNAIL_URL TEXT,
-                $COLUMN_RELEASE_DATE TEXT,
-                $COLUMN_IS_LOCKED INTEGER DEFAULT 0,
-                $COLUMN_COST INTEGER DEFAULT 0,
-                $COLUMN_FREE_DAYS INTEGER DEFAULT 0,
-                $COLUMN_IS_LIKED INTEGER DEFAULT 0,
-                $COLUMN_LIKE_COUNT INTEGER DEFAULT 0,
-                $COLUMN_IS_READ INTEGER DEFAULT 0,
-                $COLUMN_CHAPTER_PAGES TEXT,
-                FOREIGN KEY($COLUMN_COMIC_ID) REFERENCES $TABLE_COMICS($COLUMN_ID)
-            )
-        """.trimIndent()
+    CREATE TABLE $TABLE_CHAPTERS (
+        $COLUMN_CHAPTER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $COLUMN_COMIC_ID INTEGER NOT NULL,
+        $COLUMN_CHAPTER_NUMBER INTEGER NOT NULL,
+        $COLUMN_CHAPTER_TITLE TEXT NOT NULL,
+        $COLUMN_THUMBNAIL_URL TEXT,
+        $COLUMN_RELEASE_DATE TEXT,
+        $COLUMN_IS_LOCKED INTEGER DEFAULT 0,
+        $COLUMN_COST INTEGER DEFAULT 0,
+        $COLUMN_FREE_DAYS INTEGER DEFAULT 0,
+        $COLUMN_IS_LIKED INTEGER DEFAULT 0,
+        $COLUMN_LIKE_COUNT INTEGER DEFAULT 0,
+        $COLUMN_IS_READ INTEGER DEFAULT 0,
+        $COLUMN_CHAPTER_PAGES INTEGER,
+        $COLUMN_LOCAL_PATH TEXT,
+        $COLUMN_REMOTE_URL TEXT,
+        FOREIGN KEY($COLUMN_COMIC_ID) REFERENCES $TABLE_COMICS($COLUMN_ID)
+    )
+""".trimIndent()
         db?.execSQL(createChaptersTable)
     }
 
