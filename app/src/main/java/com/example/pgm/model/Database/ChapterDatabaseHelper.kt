@@ -17,9 +17,7 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
         const val COLUMN_IS_LOCKED = "is_locked"
         const val COLUMN_COST = "cost"
         const val COLUMN_FREE_DAYS = "free_days"
-        const val COLUMN_IS_LIKED = "is_liked"
         const val COLUMN_LIKE_COUNT = "like_count"
-        const val COLUMN_IS_READ = "is_read"
         const val COLUMN_PAGES = "pages"
         const val COLUMN_PAGES_LOCAL = "pages_local"
         const val COLUMN_PAGES_REMOTE = "pages_remote"
@@ -36,9 +34,7 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
             put(COLUMN_IS_LOCKED, if (chapter.isLocked) 1 else 0)
             put(COLUMN_COST, chapter.cost)
             put(COLUMN_FREE_DAYS, chapter.freeDays)
-            put(COLUMN_IS_LIKED, if (chapter.isLiked) 1 else 0)
             put(COLUMN_LIKE_COUNT, chapter.likeCount)
-            put(COLUMN_IS_READ, if (chapter.isRead) 1 else 0)
             put(COLUMN_PAGES, chapter.pages)
             put(COLUMN_PAGES_REMOTE, chapter.remoteUrl)
             put(COLUMN_PAGES_LOCAL, chapter.localPath)
@@ -66,9 +62,7 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
                 isLocked = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_LOCKED)) == 1,
                 cost = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COST)),
                 freeDays = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FREE_DAYS)),
-                isLiked = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_LIKED)) == 1,
                 likeCount = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIKE_COUNT)),
-                isRead = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_READ)) == 1,
                 pages = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PAGES)),
                 localPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PAGES_LOCAL)),
                 remoteUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PAGES_REMOTE))
@@ -111,9 +105,7 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
                         isLocked = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_LOCKED)) == 1,
                         cost = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COST)),
                         freeDays = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FREE_DAYS)),
-                        isLiked = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_LIKED)) == 1,
                         likeCount = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIKE_COUNT)),
-                        isRead = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_READ)) == 1,
                         pages = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PAGES)),
                         localPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PAGES_LOCAL)),
                         remoteUrl = cursor.getString(
@@ -130,21 +122,9 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
         return chapters
     }
 
-    fun updateChapterReadStatus(chapterId: Int, isRead: Boolean): Boolean {
+    fun updateChapterLikeCount(chapterId: Int, likeCount: Int): Boolean {
         val db = writableDatabase
         val cv = ContentValues().apply {
-            put(COLUMN_IS_READ, if (isRead) 1 else 0)
-        }
-        val result =
-            db.update(TABLE_CHAPTERS, cv, "$COLUMN_CHAPTER_ID = ?", arrayOf(chapterId.toString()))
-        db.close()
-        return result > 0
-    }
-
-    fun updateChapterLikeStatus(chapterId: Int, isLiked: Boolean, likeCount: Int): Boolean {
-        val db = writableDatabase
-        val cv = ContentValues().apply {
-            put(COLUMN_IS_LIKED, if (isLiked) 1 else 0)
             put(COLUMN_LIKE_COUNT, likeCount)
         }
         val result =

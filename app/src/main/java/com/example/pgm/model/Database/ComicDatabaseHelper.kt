@@ -16,8 +16,6 @@ class ComicDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
             put(COLUMN_TITLE, comic.title)
             put(COLUMN_AUTHOR, comic.author)
             put(COLUMN_PAGES, comic.pages)
-            put(COLUMN_LOCAL_PATH, comic.localPath)
-            put(COLUMN_REMOTE_URL, comic.remoteUrl)
             put(COLUMN_IMAGE_URL, comic.imageUrl)
         }
         val result = db.insert(TABLE_COMICS, null, cv)
@@ -37,8 +35,6 @@ class ComicDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
                         title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)),
                         author = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AUTHOR)),
                         pages = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PAGES)),
-                        localPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LOCAL_PATH)),
-                        remoteUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REMOTE_URL)),
                         imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL))
                     )
                 )

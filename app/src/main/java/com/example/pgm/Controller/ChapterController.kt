@@ -19,14 +19,8 @@ class ChapterController(context: Context) {
         return chapterDatabaseHelper.getChaptersByComicId(comicId)
     }
 
-    fun markChapterAsRead(chapterId: Int): Boolean {
-        return chapterDatabaseHelper.updateChapterReadStatus(chapterId, true)
-    }
-
-    fun toggleChapterLike(chapterId: Int, currentLikeStatus: Boolean, currentLikeCount: Int): Boolean {
-        val newLikeStatus = !currentLikeStatus
-        val newLikeCount = if (newLikeStatus) currentLikeCount + 1 else currentLikeCount - 1
-        return chapterDatabaseHelper.updateChapterLikeStatus(chapterId, newLikeStatus, newLikeCount)
+    fun updateChapterLike(chapterId: Int, likeCount: Int): Boolean {
+        return chapterDatabaseHelper.updateChapterLikeCount(chapterId, likeCount)
     }
 
     // Helper method to add sample chapters for testing
@@ -97,7 +91,6 @@ class ChapterController(context: Context) {
                 cost = 0,
                 freeDays = 0,
                 likeCount = 758,
-                isRead = true
             )
         )
 

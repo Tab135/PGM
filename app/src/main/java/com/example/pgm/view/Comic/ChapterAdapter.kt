@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pgm.R
 import com.example.pgm.model.Chapter
+import com.example.pgm.model.UserComicHistory
 
 class ChapterAdapter(
     private val chapters: List<Chapter>,
+    private val userComicHistory: UserComicHistory? = null,
+    private val highestChapterRead: Int = 0,
     private val onChapterClick: (Chapter) -> Unit,
     private val onLikeClick: (Chapter) -> Unit
 ) : RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
@@ -38,7 +41,7 @@ class ChapterAdapter(
 
     override fun onBindViewHolder(holder: ChapterViewHolder, position: Int) {
         val chapter = chapters[position]
-        
+
         // Set basic info
         holder.chapterTitle.text = "Ep. ${chapter.chapterNumber} - ${chapter.title}"
         holder.likeCount.text = chapter.likeCount.toString()
@@ -53,8 +56,10 @@ class ChapterAdapter(
                 .into(holder.chapterThumbnail)
         }
 
-        // Handle like status
-        if (chapter.isLiked) {
+        // Handle like status - check both chapter and user history
+        val isLiked = userComicHistory?.likedChapters?.contains(chapter.id) ?: false
+
+        if (isLiked) {
             holder.likeIcon.setImageResource(android.R.drawable.btn_star_big_on)
             holder.likeIcon.setColorFilter(Color.YELLOW)
         } else {
@@ -66,8 +71,13 @@ class ChapterAdapter(
         if (chapter.isLocked) {
             holder.chapterCost.visibility = View.VISIBLE
             holder.chapterCost.text = "${chapter.cost} Coins"
-            holder.chapterCost.setTextColor(holder.itemView.context.getColor(R.color.coin_green))
-            
+            holder.chapterCost.setTextColor(
+                ContextCompat.getColor(
+                    holder.itemView.context,
+                    android.R.color.holo_green_dark
+                )
+            )
+
             if (chapter.freeDays > 0) {
                 holder.lockStatus.visibility = View.VISIBLE
                 holder.lockStatus.text = "Free in ${chapter.freeDays} Day(s)"
@@ -79,27 +89,69 @@ class ChapterAdapter(
             holder.lockStatus.visibility = View.GONE
         }
 
-        // Show UP indicator for latest chapters or special status
-        if (position == 0 || chapter.chapterNumber > 20) {
+        // Show UP indicator for latest chapters, current reading chapter, or special status
+        val isLatestViewed = userComicHistory?.latestViewedChapter == chapter.id
+        val isRead = userComicHistory?.viewedChapters?.contains(chapter.id) ?: false
+        val isNewChapter = chapter.chapterNumber > highestChapterRead
+
+        if (isLatestViewed) {
             holder.upIndicator.visibility = View.VISIBLE
-            holder.upIndicator.text = "UP"
-            holder.upIndicator.setTextColor(holder.itemView.context.getColor(R.color.coin_green))
+            holder.upIndicator.text = "READING"
+            holder.upIndicator.setTextColor(
+                ContextCompat.getColor(
+                    holder.itemView.context,
+                    android.R.color.holo_blue_bright
+                )
+            )
+        } else if (isNewChapter) {
+            holder.upIndicator.visibility = View.VISIBLE
+            holder.upIndicator.text = "NEW"
+            holder.upIndicator.setTextColor(
+                ContextCompat.getColor(
+                    holder.itemView.context,
+                    android.R.color.holo_green_light
+                )
+            )
         } else {
             holder.upIndicator.visibility = View.GONE
         }
 
-        // Handle read status - dim if read
-        if (chapter.isRead) {
+        if (isRead) {
             holder.itemView.alpha = 0.6f
-            holder.chapterTitle.setTextColor(holder.itemView.context.getColor(R.color.text_disabled))
+            holder.chapterTitle.setTextColor(
+                ContextCompat.getColor(
+                    holder.itemView.context,
+                    android.R.color.darker_gray
+                )
+            )
         } else {
             holder.itemView.alpha = 1.0f
             holder.chapterTitle.setTextColor(Color.WHITE)
         }
 
+        // Highlight bookmarked chapters
+        val isBookmarked = userComicHistory?.bookmarkedChapters?.contains(chapter.id) ?: false
+        if (isBookmarked) {
+            // Use a subtle background to indicate bookmark
+            holder.itemView.setBackgroundColor(
+                ContextCompat.getColor(
+                    holder.itemView.context,
+                    android.R.color.darker_gray
+                )
+            )
+        } else {
+            holder.itemView.setBackgroundColor(Color.TRANSPARENT)
+        }
+
         // Set click listeners
         holder.itemView.setOnClickListener { onChapterClick(chapter) }
         holder.likeIcon.setOnClickListener { onLikeClick(chapter) }
+
+        // Long click to bookmark (if needed)
+        holder.itemView.setOnLongClickListener {
+            // You could add bookmark functionality here
+            true
+        }
     }
 
     override fun getItemCount(): Int = chapters.size
