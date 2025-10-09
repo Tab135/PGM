@@ -5,7 +5,5 @@ data class Comic(
     val title: String,
     val author: String? = null,
     val pages: Int? = null,
-    val localPath: String? = null,
-    val remoteUrl: String? = null,
     val imageUrl: String? = null
 )

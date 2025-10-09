@@ -99,12 +99,7 @@ class ChapterListActivity : AppCompatActivity() {
         
         var chapters = chapterController.getChaptersByComicId(comicId)
         
-        // If no chapters exist, add sample chapters for demonstration
-        if (chapters.isEmpty()) {
-            chapterController.addSampleChapters(comicId)
-            chapters = chapterController.getChaptersByComicId(comicId)
-        }
-        
+
         adapter = ChapterAdapter(
             chapters = chapters,
             onChapterClick = { chapter -> openChapter(chapter) },
