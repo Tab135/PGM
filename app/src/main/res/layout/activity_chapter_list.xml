@@ -24,7 +24,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:paddingTop="20dp">
 
                 <ImageView
                     android:id="@+id/backButton"
@@ -48,18 +49,31 @@
                     app:cardBackgroundColor="@android:color/white"
                     app:cardElevation="0dp">
 
-                    <TextView
-                        android:id="@+id/subscribeText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+ Subscribe"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="8dp" />
-
                 </androidx.cardview.widget.CardView>
+
+                <!-- FEEDBACK BUTTON - MOVED HERE -->
+
+                <ImageView
+                    android:id="@+id/feedbackButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="View Feedback"
+                    android:padding="4dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    android:tint="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/subscribeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
+                    android:text="+ Subscribe"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/infoButton"
@@ -213,6 +227,7 @@
                             android:alpha="0.8" />
 
                         <TextView
+                            android:id="@+id/rateButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="RATE"

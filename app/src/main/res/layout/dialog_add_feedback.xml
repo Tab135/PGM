@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Rating Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Rating"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:rating="0"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal" />
+
+        <!-- Comment Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Thoughts"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/commentEditText"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="8dp"
+            android:gravity="top|start"
+            android:hint="Share your experience with this comic..."
+            android:inputType="textMultiLine"
+            android:maxLength="500"
+            android:padding="12dp"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- Categories Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="What did you like? (Optional)"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select all that apply"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/categoriesChipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="4dp"
+            app:singleSelection="false" />
+
+        <!-- Anonymous Option -->
+        <CheckBox
+            android:id="@+id/anonymousCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post anonymously"
+            android:textSize="14sp"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your name won't be shown with this review"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -9,7 +9,7 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
 
     companion object {
         const val DATABASE_NAME = "ComicLibrary.db"
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 4
 
         // Users table
         const val TABLE_USERS = "users"
@@ -111,6 +111,8 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
         
         // Create UserComicHistory table
         createUserComicHistoryTable(db)
+
+        createFeedbackTable(db)
     }
 
     private fun createUserComicHistoryTable(db: SQLiteDatabase?) {
@@ -160,8 +162,30 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
         db?.execSQL(createUsersTable)
         Log.d("Database", "Users table created or already exists")
     }
-
+    private fun createFeedbackTable(db: SQLiteDatabase?) {
+        val createFeedbackTable = """
+        CREATE TABLE IF NOT EXISTS feedback (
+            _id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            comic_id INTEGER NOT NULL,
+            rating REAL NOT NULL,
+            comment TEXT NOT NULL,
+            categories TEXT DEFAULT '',
+            is_anonymous INTEGER DEFAULT 0,
+            created_at TEXT NOT NULL,
+            updated_at TEXT,
+            likes INTEGER DEFAULT 0,
+            is_edited INTEGER DEFAULT 0,
+            FOREIGN KEY(user_id) REFERENCES $TABLE_USERS($COLUMN_USER_ID),
+            FOREIGN KEY(comic_id) REFERENCES $TABLE_COMICS($COLUMN_ID),
+            UNIQUE(user_id, comic_id)
+        )
+    """.trimIndent()
+        db?.execSQL(createFeedbackTable)
+        Log.d("Database", "Feedback table created")
+    }
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db?.execSQL("DROP TABLE IF EXISTS feedback")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_USER_COMIC_HISTORY")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_CHAPTERS")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_COMICS")

@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PGM">
         <activity
+            android:name=".view.Feedback.FeedbackActivity"
+            android:exported="false"
+            android:parentActivityName=".view.Comic.ChapterListActivity" />
+        <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
         <activity
