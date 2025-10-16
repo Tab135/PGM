@@ -27,8 +27,8 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
         const val COLUMN_TITLE = "title"
         const val COLUMN_AUTHOR = "author"
         const val COLUMN_PAGES = "pages"
-        const val COLUMN_LOCAL_PATH = "local_path"
-        const val COLUMN_REMOTE_URL = "remote_url"
+//        const val COLUMN_LOCAL_PATH = "local_path"
+//        const val COLUMN_REMOTE_URL = "remote_url"
         const val COLUMN_IMAGE_URL = "image_url"
 
         // Chapters table

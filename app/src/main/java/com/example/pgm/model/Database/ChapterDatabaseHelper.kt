@@ -132,4 +132,30 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
         db.close()
         return result > 0
     }
+    fun deleteChapter(chapterId: Int): Boolean {
+        val db = writableDatabase
+        val result = db.delete(TABLE_CHAPTERS, "$COLUMN_CHAPTER_ID = ?", arrayOf(chapterId.toString()))
+        db.close()
+        return result > 0
+    }
+    fun updateChapter(chapter: Chapter): Boolean {
+        val db = writableDatabase
+        val cv = ContentValues().apply {
+            put(COLUMN_COMIC_ID, chapter.comicId)
+            put(COLUMN_CHAPTER_NUMBER, chapter.chapterNumber)
+            put(COLUMN_CHAPTER_TITLE, chapter.title)
+            put(COLUMN_THUMBNAIL_URL, chapter.thumbnailUrl)
+            put(COLUMN_RELEASE_DATE, chapter.releaseDate)
+            put(COLUMN_IS_LOCKED, if (chapter.isLocked) 1 else 0)
+            put(COLUMN_COST, chapter.cost)
+            put(COLUMN_FREE_DAYS, chapter.freeDays)
+            put(COLUMN_LIKE_COUNT, chapter.likeCount)
+            put(COLUMN_PAGES, chapter.pages)
+            put(COLUMN_PAGES_REMOTE, chapter.remoteUrl)
+            put(COLUMN_PAGES_LOCAL, chapter.localPath)
+        }
+        val result = db.update(TABLE_CHAPTERS, cv, "$COLUMN_CHAPTER_ID = ?", arrayOf(chapter.id.toString()))
+        db.close()
+        return result > 0
+    }
 }

@@ -250,25 +250,25 @@ class UserComicHistoryController(private val context: Context) {
     /**
      * Update reading progress
      */
-    fun updateReadingProgress(
-        userId: Int, 
-        comicId: Int, 
-        chapterId: Int, 
-        currentPage: Int, 
-        totalPages: Int
-    ): Boolean {
-        return try {
-            val history = getOrCreateUserComicHistory(userId, comicId)
-            val updatedHistory = updateReadingProgressHelper(history, currentPage, totalPages, chapterId)
-            
-            dbHelper.insertOrUpdateUserComicHistory(updatedHistory)
-            Log.d(TAG, "Updated reading progress for user $userId, comic $comicId, page $currentPage/$totalPages")
-            true
-        } catch (e: Exception) {
-            Log.e(TAG, "Error updating reading progress", e)
-            false
-        }
-    }
+//    fun updateReadingProgress(
+//        userId: Int,
+//        comicId: Int,
+//        chapterId: Int,
+//        currentPage: Int,
+//        totalPages: Int
+//    ): Boolean {
+//        return try {
+//            val history = getOrCreateUserComicHistory(userId, comicId)
+//            val updatedHistory = updateReadingProgressHelper(history, currentPage, totalPages, chapterId)
+//
+//            dbHelper.insertOrUpdateUserComicHistory(updatedHistory)
+//            Log.d(TAG, "Updated reading progress for user $userId, comic $comicId, page $currentPage/$totalPages")
+//            true
+//        } catch (e: Exception) {
+//            Log.e(TAG, "Error updating reading progress", e)
+//            false
+//        }
+//    }
 
     /**
      * Toggle favorite status for a comic
