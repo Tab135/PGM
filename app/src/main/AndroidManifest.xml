@@ -20,14 +20,29 @@
             android:exported="false"
             android:parentActivityName=".view.Comic.ChapterListActivity" />
         <activity
-            android:name=".view.ForgotPasswordActivity"
+
+            android:name=".view.ChapterManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".view.ProfileActivity"
+            android:name=".view.AddEditChapterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ChapterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.AddEditComicActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.AdminActivity"
             android:exported="false" />
         <activity
             android:name=".view.RegisterActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:exported="false"
+            />
+        <activity android:name=".view.ProfileActivity" />
         <activity
             android:name=".view.LoginActivity"
             android:exported="true">

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1a1a1a">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Top bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#2a2a2a"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@android:color/white" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="Add/Edit Chapter"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Form -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Chapter Number -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chapter Number *"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/chapterNumberInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="e.g. 1"
+                android:textColor="#FF000000"
+                android:textColorHint="#808080"
+                android:background="@android:drawable/edit_text"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Chapter Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chapter Title *"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/chapterTitleInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="e.g. The Beginning"
+                android:textColor="#FF000000"
+                android:textColorHint="#808080"
+                android:background="@android:drawable/edit_text"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Thumbnail URL -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thumbnail Image URL"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_border"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp">
+
+                <!-- Thumbnail Preview -->
+                <ImageView
+                    android:id="@+id/ivThumbnailPreview"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_comic_placeholder"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/rounded_border" />
+
+                <!-- Thumbnail URL Input -->
+                <EditText
+                    android:id="@+id/thumbnailUrlInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:hint="https://example.com/thumbnail.jpg"
+                    android:textColor="#FF000000"
+                    android:textColorHint="#808080"
+                    android:background="@android:drawable/edit_text"
+                    android:padding="12dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Preview Button -->
+                <Button
+                    android:id="@+id/btnPreviewThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Preview Thumbnail"
+                    android:drawableLeft="@android:drawable/ic_menu_view"
+                    android:drawablePadding="8dp"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="@android:color/holo_blue_dark" />
+            </LinearLayout>
+
+            <!-- Release Date -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Release Date"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/releaseDateInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="e.g. Jan 1, 2024"
+                android:textColor="#FF000000"
+                android:textColorHint="#808080"
+                android:background="@android:drawable/edit_text"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- PDF URL -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chapter Content (PDF URL) *"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_border"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/pdfUrlInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:hint="https://example.com/chapter.pdf"
+                    android:textColor="#FF000000"
+                    android:textColorHint="#808080"
+                    android:background="@android:drawable/edit_text"
+                    android:padding="12dp"
+                    android:minLines="2" />
+            </LinearLayout>
+
+            <!-- Is Locked -->
+            <CheckBox
+                android:id="@+id/isLockedCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Locked Chapter"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Cost -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cost (Coins)"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/costInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="e.g. 7"
+                android:textColor="#FF000000"
+                android:textColorHint="#808080"
+                android:background="@android:drawable/edit_text"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Free Days -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Free in Days"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/freeDaysInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="e.g. 7"
+                android:textColor="#FF000000"
+                android:textColorHint="#808080"
+                android:background="@android:drawable/edit_text"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/cancelButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cancel"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/saveButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Save"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="@android:color/holo_blue_dark"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
