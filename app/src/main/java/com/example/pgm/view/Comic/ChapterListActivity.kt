@@ -344,10 +344,26 @@ class ChapterListActivity : AppCompatActivity() {
     }
 
     private fun unlockChapter(chapter: Chapter) {
-        // In a real app, you would handle the coin transaction here
-        val intent = Intent(this, ComicViewerActivity::class.java)
-        intent.putExtra("chapterId", chapter.id)
-        intent.putExtra("comicId", comicId)
-        startActivity(intent)
+        if (currentUserId == -1) {
+            android.widget.Toast.makeText(this, "Please log in to unlock chapters", android.widget.Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // TODO: deduct coins from user wallet. For now, we just record the purchase locally.
+        val success = userComicHistoryController.recordChapterPurchase(currentUserId, comicId, chapter.id)
+
+        if (success) {
+            // Refresh local history and UI
+            userComicHistory = userComicHistoryController.getOrCreateUserComicHistory(currentUserId, comicId)
+            loadChapters()
+
+            // Open chapter viewer after purchase
+            val intent = Intent(this, ComicViewerActivity::class.java)
+            intent.putExtra("chapterId", chapter.id)
+            intent.putExtra("comicId", comicId)
+            startActivity(intent)
+        } else {
+            android.widget.Toast.makeText(this, "Failed to unlock chapter", android.widget.Toast.LENGTH_SHORT).show()
+        }
     }
 }

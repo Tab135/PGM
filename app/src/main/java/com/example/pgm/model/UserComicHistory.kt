@@ -27,6 +27,7 @@ data class UserComicHistory(
     val lastReadingDate: Date? = null, // Last time user read this comic
     val bookmarkedChapters: List<Int> = emptyList(), // List of bookmarked chapter IDs
     val likedChapters: List<Int> = emptyList(), // List of liked chapter IDs
+    val purchasedChapters: List<Int> = emptyList(), // List of purchased chapter IDs
     val readingProgress: Float = 0.0f, // Overall progress in the comic (0.0 to 1.0)
     val isCompleted: Boolean = false, // Whether user has completed the entire comic
     val isFavorite: Boolean = false, // Whether user has marked this comic as favorite

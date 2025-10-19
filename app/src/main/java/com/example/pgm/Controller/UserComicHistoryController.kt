@@ -104,6 +104,21 @@ class UserComicHistoryController(private val context: Context) {
     }
 
     /**
+     * Add purchased chapter
+     */
+    private fun addPurchasedChapterHelper(history: UserComicHistory, chapterId: Int): UserComicHistory {
+        val updatedPurchased = history.purchasedChapters.toMutableList()
+        if (!updatedPurchased.contains(chapterId)) {
+            updatedPurchased.add(chapterId)
+        }
+
+        return history.copy(
+            purchasedChapters = updatedPurchased,
+            updatedAt = Date()
+        )
+    }
+
+    /**
      * Update reading streak
      */
     private fun updateReadingStreakHelper(history: UserComicHistory): UserComicHistory {
@@ -346,6 +361,31 @@ class UserComicHistoryController(private val context: Context) {
             Log.e(TAG, "Error toggling chapter like", e)
             false
         }
+    }
+
+    /**
+     * Record that a chapter was purchased/unlocked by the user
+     */
+    fun recordChapterPurchase(userId: Int, comicId: Int, chapterId: Int): Boolean {
+        return try {
+            val history = getOrCreateUserComicHistory(userId, comicId)
+            val updatedHistory = addPurchasedChapterHelper(history, chapterId)
+
+            dbHelper.insertOrUpdateUserComicHistory(updatedHistory)
+            Log.d(TAG, "Recorded purchase for user $userId, comic $comicId, chapter $chapterId")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error recording chapter purchase", e)
+            false
+        }
+    }
+
+    /**
+     * Check if a chapter has been purchased by the user
+     */
+    fun isChapterPurchased(userId: Int, comicId: Int, chapterId: Int): Boolean {
+        val history = dbHelper.getUserComicHistory(userId, comicId)
+        return history?.purchasedChapters?.contains(chapterId) ?: false
     }
     
     /**

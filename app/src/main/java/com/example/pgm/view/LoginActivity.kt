@@ -37,12 +37,15 @@ class LoginActivity : AppCompatActivity() {
             Chapter(
                 id = 1,
                 comicId = 1,
-                chapterNumber = 2,
+                chapterNumber = 3,
                 title = "The Beginning of the End",
                 thumbnailUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F344513261579032958%2F3172d8c8e90d8be9910ff0e87a3a57b3_400x400.png&f=1&nofb=1&ipt=ff64798cdaaa4726a5c41bea220c20618b781abb2ca474b1cb8cebc11e18488f",
                 releaseDate = "Jan 01, 2024",
                 likeCount = 15402,
                 pages = 45,
+                cost = 300,
+                isLocked = true,
+                freeDays = 3,
                 remoteUrl = "https://www.ics.uci.edu/~magda/cs620/ch4.pdf"
             )
         )

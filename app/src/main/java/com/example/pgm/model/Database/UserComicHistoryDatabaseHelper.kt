@@ -26,6 +26,7 @@ class UserComicHistoryDatabaseHelper(context: Context) : BaseDatabaseHelper(cont
         const val COLUMN_LAST_READING_DATE = "last_reading_date"
         const val COLUMN_BOOKMARKED_CHAPTERS = "bookmarked_chapters"
         const val COLUMN_LIKED_CHAPTERS = "liked_chapters"
+    const val COLUMN_PURCHASED_CHAPTERS = "purchased_chapters"
         const val COLUMN_READING_PROGRESS = "reading_progress"
         const val COLUMN_IS_COMPLETED = "is_completed"
         const val COLUMN_IS_FAVORITE = "is_favorite"
@@ -76,6 +77,7 @@ class UserComicHistoryDatabaseHelper(context: Context) : BaseDatabaseHelper(cont
             put(COLUMN_LAST_READING_DATE, history.lastReadingDate?.let { dateFormat.format(it) })
             put(COLUMN_BOOKMARKED_CHAPTERS, listToString(history.bookmarkedChapters))
             put(COLUMN_LIKED_CHAPTERS, listToString(history.likedChapters))
+            put(COLUMN_PURCHASED_CHAPTERS, listToString(history.purchasedChapters))
             put(COLUMN_READING_PROGRESS, history.readingProgress)
             put(COLUMN_IS_COMPLETED, if (history.isCompleted) 1 else 0)
             put(COLUMN_IS_FAVORITE, if (history.isFavorite) 1 else 0)
@@ -200,10 +202,12 @@ class UserComicHistoryDatabaseHelper(context: Context) : BaseDatabaseHelper(cont
             val viewedChaptersJson = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_VIEWED_CHAPTERS))
             val bookmarkedChaptersJson = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BOOKMARKED_CHAPTERS))
             val likedChaptersJson = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LIKED_CHAPTERS))
+            val purchasedChaptersJson = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PURCHASED_CHAPTERS))
             
             val viewedChapters: List<Int> = stringToList(viewedChaptersJson)
             val bookmarkedChapters: List<Int> = stringToList(bookmarkedChaptersJson)
             val likedChapters: List<Int> = stringToList(likedChaptersJson)
+            val purchasedChapters: List<Int> = stringToList(purchasedChaptersJson)
             
             val lastReadingDateStr = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LAST_READING_DATE))
             val lastReadingDate = lastReadingDateStr?.let { dateFormat.parse(it) }
@@ -222,6 +226,7 @@ class UserComicHistoryDatabaseHelper(context: Context) : BaseDatabaseHelper(cont
                 lastReadingDate = lastReadingDate,
                 bookmarkedChapters = bookmarkedChapters,
                 likedChapters = likedChapters,
+                purchasedChapters = purchasedChapters,
                 readingProgress = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_READING_PROGRESS)),
                 isCompleted = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_COMPLETED)) == 1,
                 isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_FAVORITE)) == 1,
