@@ -226,25 +226,55 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Free Days -->
+            <!-- Free Date -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Free in Days"
+                android:text="Free Date"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/freeDaysInput"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="e.g. 7"
-                android:textColor="#FF000000"
-                android:textColorHint="#808080"
-                android:background="@android:drawable/edit_text"
-                android:padding="12dp"
+                android:orientation="horizontal"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/freeDateInput"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:hint="Select date..."
+                    android:textColor="#FF000000"
+                    android:textColorHint="#808080"
+                    android:background="@android:drawable/edit_text"
+                    android:padding="12dp"
+                    android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnAuto30Days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Auto\n30 Days"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="@android:color/holo_green_dark"
+                    android:minWidth="80dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selected: Not set"
+                android:id="@+id/freeDateDisplay"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
                 android:layout_marginBottom="24dp" />
 
             <!-- Buttons -->

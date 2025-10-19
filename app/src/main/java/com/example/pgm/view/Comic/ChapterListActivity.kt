@@ -266,7 +266,7 @@ class ChapterListActivity : AppCompatActivity() {
     }
 
     private fun openChapter(chapter: Chapter) {
-        if (chapter.isLocked) {
+        if (chapter.isCurrentlyLocked()) {
             // Show unlock dialog or purchase screen
             showUnlockDialog(chapter)
         } else {
@@ -317,9 +317,11 @@ class ChapterListActivity : AppCompatActivity() {
     }
 
     private fun showUnlockDialog(chapter: Chapter) {
-        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
-        builder.setTitle("Unlock Chapter")
-        builder.setMessage("This chapter costs ${chapter.cost} coins or will be free in ${chapter.freeDays} days.")
+    val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+    builder.setTitle("Unlock Chapter")
+    val days = chapter.daysUntilFree()
+    val freeMsg = if (days > 0) "or will be free in ${days} days" else ""
+    builder.setMessage("This chapter costs ${chapter.cost} coins $freeMsg.")
         builder.setPositiveButton("Unlock") { _, _ ->
             unlockChapter(chapter)
         }

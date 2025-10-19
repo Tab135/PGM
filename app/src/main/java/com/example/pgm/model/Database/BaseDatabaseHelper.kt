@@ -42,6 +42,7 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
         const val COLUMN_IS_LOCKED = "is_locked"
         const val COLUMN_COST = "cost"
         const val COLUMN_FREE_DAYS = "free_days"
+    const val COLUMN_FREE_DATE = "free_date"
         const val COLUMN_IS_LIKED = "is_liked"
         const val COLUMN_LIKE_COUNT = "like_count"
         const val COLUMN_IS_READ = "is_read"
@@ -99,6 +100,7 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
         $COLUMN_IS_LOCKED INTEGER DEFAULT 0,
         $COLUMN_COST INTEGER DEFAULT 0,
         $COLUMN_FREE_DAYS INTEGER DEFAULT 0,
+        $COLUMN_FREE_DATE INTEGER DEFAULT 0,
         $COLUMN_IS_LIKED INTEGER DEFAULT 0,
         $COLUMN_LIKE_COUNT INTEGER DEFAULT 0,
         $COLUMN_IS_READ INTEGER DEFAULT 0,

@@ -68,9 +68,9 @@ class ChapterAdapter(
         }
 
         // Handle lock status and cost (consider purchased chapters)
-        val isPurchased = userComicHistory?.purchasedChapters?.contains(chapter.id) ?: false
+    val isPurchased = userComicHistory?.purchasedChapters?.contains(chapter.id) ?: false
 
-        if (chapter.isLocked && !isPurchased) {
+    if (chapter.isCurrentlyLocked() && !isPurchased) {
             holder.chapterCost.visibility = View.VISIBLE
             holder.chapterCost.text = "${chapter.cost} Coins"
             holder.chapterCost.setTextColor(
@@ -79,9 +79,10 @@ class ChapterAdapter(
                     android.R.color.holo_green_dark
                 )
             )
-            if (chapter.freeDays > 0) {
+            val days = chapter.daysUntilFree()
+            if (days > 0) {
                 holder.lockStatus.visibility = View.VISIBLE
-                holder.lockStatus.text = "Free in ${chapter.freeDays} Day(s)"
+                holder.lockStatus.text = "Free in ${days} Day(s)"
             } else {
                 holder.lockStatus.visibility = View.GONE
             }

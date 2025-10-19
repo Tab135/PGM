@@ -265,7 +265,7 @@ class ChapterActivity : AppCompatActivity() {
         if (currentChapterIndex < allChapters.size - 1) {
             val nextChapter = allChapters[currentChapterIndex + 1]
 
-            if (nextChapter.isLocked) {
+            if (nextChapter.isCurrentlyLocked()) {
                 Toast.makeText(this, "This chapter is locked", Toast.LENGTH_SHORT).show()
                 return
             }

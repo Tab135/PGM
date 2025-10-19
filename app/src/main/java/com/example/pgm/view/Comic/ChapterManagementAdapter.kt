@@ -40,8 +40,10 @@ class ChapterManagementAdapter (
         // Build info string
         val infoBuilder = StringBuilder()
         infoBuilder.append("Pages: ${chapter.pages ?: 0}")
-        if (chapter.isLocked) {
-            infoBuilder.append(" • Locked (${chapter.cost} coins)")
+        if (chapter.isCurrentlyLocked()) {
+            val days = chapter.daysUntilFree()
+            val freeText = if (days > 0) " • Locked (${chapter.cost} coins) • Free in ${days}d" else " • Locked (${chapter.cost} coins)"
+            infoBuilder.append(freeText)
         } else {
             infoBuilder.append(" • Free")
         }

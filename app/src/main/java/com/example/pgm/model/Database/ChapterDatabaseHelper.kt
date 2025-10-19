@@ -17,6 +17,7 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
         const val COLUMN_IS_LOCKED = "is_locked"
         const val COLUMN_COST = "cost"
         const val COLUMN_FREE_DAYS = "free_days"
+    const val COLUMN_FREE_DATE = "free_date"
         const val COLUMN_LIKE_COUNT = "like_count"
         const val COLUMN_PAGES = "pages"
         const val COLUMN_PAGES_LOCAL = "pages_local"
@@ -34,6 +35,7 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
             put(COLUMN_IS_LOCKED, if (chapter.isLocked) 1 else 0)
             put(COLUMN_COST, chapter.cost)
             put(COLUMN_FREE_DAYS, chapter.freeDays)
+            chapter.freeDate?.let { put(COLUMN_FREE_DATE, it) }
             put(COLUMN_LIKE_COUNT, chapter.likeCount)
             put(COLUMN_PAGES, chapter.pages)
             put(COLUMN_PAGES_REMOTE, chapter.remoteUrl)
@@ -62,6 +64,13 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
                 isLocked = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_LOCKED)) == 1,
                 cost = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COST)),
                 freeDays = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FREE_DAYS)),
+                freeDate = run {
+                    val idx = cursor.getColumnIndex(COLUMN_FREE_DATE)
+                    if (idx != -1) {
+                        val v = cursor.getLong(idx)
+                        if (v == 0L) null else v
+                    } else null
+                },
                 likeCount = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIKE_COUNT)),
                 pages = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PAGES)),
                 localPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PAGES_LOCAL)),
@@ -105,6 +114,13 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
                         isLocked = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_LOCKED)) == 1,
                         cost = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COST)),
                         freeDays = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FREE_DAYS)),
+                        freeDate = run {
+                            val idx = cursor.getColumnIndex(COLUMN_FREE_DATE)
+                            if (idx != -1) {
+                                val v = cursor.getLong(idx)
+                                if (v == 0L) null else v
+                            } else null
+                        },
                         likeCount = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIKE_COUNT)),
                         pages = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PAGES)),
                         localPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PAGES_LOCAL)),
@@ -153,6 +169,7 @@ class ChapterDatabaseHelper(context: Context) : BaseDatabaseHelper(context) {
             put(COLUMN_PAGES, chapter.pages)
             put(COLUMN_PAGES_REMOTE, chapter.remoteUrl)
             put(COLUMN_PAGES_LOCAL, chapter.localPath)
+            chapter.freeDate?.let { put(COLUMN_FREE_DATE, it) }
         }
         val result = db.update(TABLE_CHAPTERS, cv, "$COLUMN_CHAPTER_ID = ?", arrayOf(chapter.id.toString()))
         db.close()
