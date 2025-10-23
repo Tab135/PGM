@@ -16,11 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PGM">
         <activity
+            android:name=".view.Payment.TokenShopActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.Feedback.FeedbackActivity"
             android:exported="false"
             android:parentActivityName=".view.Comic.ChapterListActivity" />
         <activity
-
             android:name=".view.ChapterManagementActivity"
             android:exported="false" />
         <activity
@@ -40,8 +42,7 @@
             android:exported="false" />
         <activity
             android:name=".view.ForgotPasswordActivity"
-            android:exported="false"
-            />
+            android:exported="false" />
         <activity android:name=".view.ProfileActivity" />
         <activity
             android:name=".view.LoginActivity"

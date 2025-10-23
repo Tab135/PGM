@@ -2,6 +2,7 @@ package com.example.pgm.view.Comic
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -17,8 +18,10 @@ import com.example.pgm.R
 import com.example.pgm.model.Chapter
 import com.example.pgm.model.Comic
 import com.example.pgm.model.UserComicHistory
+import com.example.pgm.model.TokenManager
+import com.example.pgm.model.Database.UserDatabaseHelper
 import com.example.pgm.view.Feedback.FeedbackActivity
-
+import com.example.pgm.view.Payment.TokenShopActivity
 class ChapterListActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -28,6 +31,8 @@ class ChapterListActivity : AppCompatActivity() {
     private lateinit var userComicHistoryController: UserComicHistoryController
     private lateinit var feedbackController: FeedbackController
     private lateinit var sessionManager: SessionManager
+    private lateinit var tokenManager: TokenManager
+    private lateinit var userDbHelper: UserDatabaseHelper
 
     private lateinit var comicCover: ImageView
     private lateinit var comicTitle: TextView
@@ -40,7 +45,8 @@ class ChapterListActivity : AppCompatActivity() {
     private lateinit var feedbackButton: ImageView
     private lateinit var rateButton: TextView
     private lateinit var subscribeButton: androidx.cardview.widget.CardView
-
+    private lateinit var tokenBalanceTextView: TextView // Add token display
+    private lateinit var shopButton: ImageView
     private var currentComic: Comic? = null
     private var comicId: Int = -1
     private var currentUserId: Int = -1
@@ -63,6 +69,7 @@ class ChapterListActivity : AppCompatActivity() {
         loadUserHistory()
         loadChapters()
         setupClickListeners()
+        updateTokenDisplay() // Display user's token balance
     }
 
     private fun initViews() {
@@ -78,6 +85,8 @@ class ChapterListActivity : AppCompatActivity() {
         feedbackButton = findViewById(R.id.feedbackButton)
         rateButton = findViewById(R.id.rateButton)
         subscribeButton = findViewById(R.id.subscribeButton)
+        tokenBalanceTextView = findViewById(R.id.tokenBalanceTextView) // Initialize token TextView
+        shopButton = findViewById(R.id.shopButton)
     }
 
     private fun setupControllers() {
@@ -86,6 +95,8 @@ class ChapterListActivity : AppCompatActivity() {
         userComicHistoryController = UserComicHistoryController(this)
         feedbackController = FeedbackController(this)
         sessionManager = SessionManager(this)
+        tokenManager = TokenManager(this)
+        userDbHelper = UserDatabaseHelper(this)
     }
 
     private fun loadUserSession() {
@@ -125,6 +136,24 @@ class ChapterListActivity : AppCompatActivity() {
             }
         } ?: run {
             subscribeText?.text = "Subscribe"
+        }
+    }
+
+    private fun updateTokenDisplay() {
+        if (currentUserId != -1) {
+            // Debug the token issue
+            tokenManager.debugTokenIssue(currentUserId)
+
+            val tokenBalance = tokenManager.getUserTokenBalance(currentUserId)
+            tokenBalanceTextView.text = "🪙 $tokenBalance"
+            tokenBalanceTextView.visibility = android.view.View.VISIBLE
+            shopButton.visibility = android.view.View.VISIBLE // Show shop button when logged in
+
+            Log.d("TokenDebug", "Displaying tokens for user $currentUserId: $tokenBalance")
+        } else {
+            tokenBalanceTextView.visibility = android.view.View.GONE
+            shopButton.visibility = android.view.View.GONE // Hide shop button when not logged in
+            Log.d("TokenDebug", "User not logged in, hiding token display")
         }
     }
 
@@ -222,6 +251,13 @@ class ChapterListActivity : AppCompatActivity() {
             finish()
         }
 
+        // Token balance click - show token info or shop
+        tokenBalanceTextView.setOnClickListener {
+            showTokenInfoDialog()
+        }
+        shopButton.setOnClickListener {
+            openTokenShop()
+        }
         // Feedback button click listener
         feedbackButton.setOnClickListener {
             val intent = Intent(this, FeedbackActivity::class.java)
@@ -250,7 +286,15 @@ class ChapterListActivity : AppCompatActivity() {
             }
         }
     }
+    private fun openTokenShop() {
+        if (currentUserId == -1) {
+            android.widget.Toast.makeText(this, "Please log in to access the token shop", android.widget.Toast.LENGTH_SHORT).show()
+            return
+        }
 
+        val intent = Intent(this, TokenShopActivity::class.java)
+        startActivity(intent)
+    }
     private fun updateFavoriteButton() {
         // Update the subscribe button based on favorite status
         userComicHistory?.let { history ->
@@ -266,36 +310,46 @@ class ChapterListActivity : AppCompatActivity() {
     }
 
     private fun openChapter(chapter: Chapter) {
-        if (chapter.isCurrentlyLocked()) {
-            // Show unlock dialog or purchase screen
-            showUnlockDialog(chapter)
-        } else {
-            // Record in user comic history if user is logged in
-            if (currentUserId != -1) {
-                userComicHistoryController.recordChapterViewed(
-                    currentUserId,
-                    comicId,
-                    chapter.id,
-                    chapter.pages ?: 0
-                )
-
-                // Update local history object
-                userComicHistory = userComicHistoryController.getOrCreateUserComicHistory(currentUserId, comicId)
-            }
-
-            // Open chapter viewer
-            val intent = Intent(this, ComicViewerActivity::class.java)
-            intent.putExtra("chapterId", chapter.id)
-            intent.putExtra("comicId", comicId)
-            startActivity(intent)
+        if (currentUserId == -1) {
+            android.widget.Toast.makeText(this, "Please log in to read chapters", android.widget.Toast.LENGTH_SHORT).show()
+            return
         }
+
+        // Check if chapter is accessible (free or already purchased)
+        if (tokenManager.isChapterAccessible(chapter, userComicHistory)) {
+            // Can read directly
+            openChapterViewer(chapter)
+        } else {
+            // Chapter is locked - need to unlock with tokens
+            showUnlockDialog(chapter)
+        }
+    }
+
+    private fun openChapterViewer(chapter: Chapter) {
+        // Record in user comic history
+        userComicHistoryController.recordChapterViewed(
+            currentUserId,
+            comicId,
+            chapter.id,
+            chapter.pages ?: 0
+        )
+
+        // Update local history object
+        userComicHistory = userComicHistoryController.getOrCreateUserComicHistory(currentUserId, comicId)
+
+        // Open chapter viewer
+        val intent = Intent(this, ComicViewerActivity::class.java)
+        intent.putExtra("chapterId", chapter.id)
+        intent.putExtra("comicId", comicId)
+        startActivity(intent)
     }
 
     override fun onResume() {
         super.onResume()
-        // Refresh the list when returning from chapter viewer to show updated read status
+        // Refresh when returning from chapter viewer
         loadChapters()
-        loadFeedbackRating() // Refresh feedback rating
+        loadFeedbackRating()
+        updateTokenDisplay() // Refresh token balance
     }
 
     private fun toggleChapterLike(chapter: Chapter) {
@@ -317,14 +371,45 @@ class ChapterListActivity : AppCompatActivity() {
     }
 
     private fun showUnlockDialog(chapter: Chapter) {
-    val builder = androidx.appcompat.app.AlertDialog.Builder(this)
-    builder.setTitle("Unlock Chapter")
-    val days = chapter.daysUntilFree()
-    val freeMsg = if (days > 0) "or will be free in ${days} days" else ""
-    builder.setMessage("This chapter costs ${chapter.cost} coins $freeMsg.")
-        builder.setPositiveButton("Unlock") { _, _ ->
-            unlockChapter(chapter)
+        if (currentUserId == -1) {
+            android.widget.Toast.makeText(this, "Please log in to unlock chapters", android.widget.Toast.LENGTH_SHORT).show()
+            return
         }
+
+        val tokenBalance = tokenManager.getUserTokenBalance(currentUserId)
+        val chapterCost = chapter.cost
+        val days = chapter.daysUntilFree()
+
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Unlock Chapter?")
+
+        val message = buildString {
+            append("Chapter: ${chapter.title}\n")
+            append("Cost: $chapterCost tokens\n")
+            append("Your balance: $tokenBalance tokens\n")
+            if (days > 0) {
+                append("\nOr wait $days day(s) for free access")
+            }
+
+            if (tokenBalance < chapterCost) {
+                append("\n\n⚠️ Insufficient tokens!")
+            } else {
+                append("\nBalance after unlock: ${tokenBalance - chapterCost} tokens")
+            }
+        }
+
+        builder.setMessage(message)
+
+        if (tokenBalance >= chapterCost) {
+            builder.setPositiveButton("Unlock") { _, _ ->
+                unlockChapter(chapter)
+            }
+        } else {
+            builder.setPositiveButton("Get More Tokens") { _, _ ->
+                showGetTokensDialog()
+            }
+        }
+
         builder.setNegativeButton("Cancel", null)
         builder.show()
     }
@@ -351,21 +436,74 @@ class ChapterListActivity : AppCompatActivity() {
             return
         }
 
-        // TODO: deduct coins from user wallet. For now, we just record the purchase locally.
-        val success = userComicHistoryController.recordChapterPurchase(currentUserId, comicId, chapter.id)
+        // Use TokenManager to unlock chapter
+        val result = tokenManager.unlockChapter(currentUserId, chapter, userComicHistory)
 
-        if (success) {
+        if (result.success) {
+            // Show success message
+            android.widget.Toast.makeText(
+                this,
+                "Chapter unlocked! Spent ${result.tokensSpent} tokens. Balance: ${result.remainingTokens}",
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+
             // Refresh local history and UI
             userComicHistory = userComicHistoryController.getOrCreateUserComicHistory(currentUserId, comicId)
+            updateTokenDisplay()
             loadChapters()
 
-            // Open chapter viewer after purchase
-            val intent = Intent(this, ComicViewerActivity::class.java)
-            intent.putExtra("chapterId", chapter.id)
-            intent.putExtra("comicId", comicId)
-            startActivity(intent)
+            // Open chapter viewer
+            openChapterViewer(chapter)
         } else {
-            android.widget.Toast.makeText(this, "Failed to unlock chapter", android.widget.Toast.LENGTH_SHORT).show()
+            // Show error message
+            android.widget.Toast.makeText(this, result.message, android.widget.Toast.LENGTH_LONG).show()
+
+            // Offer to get more tokens
+            showGetTokensDialog()
         }
     }
+
+    private fun showTokenInfoDialog() {
+        if (currentUserId == -1) {
+            android.widget.Toast.makeText(this, "Please log in to view tokens", android.widget.Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val tokenBalance = tokenManager.getUserTokenBalance(currentUserId)
+
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Your Token Balance")
+        builder.setMessage(
+            "Current balance: $tokenBalance tokens\n\n" +
+                    "• Use tokens to unlock locked chapters\n" +
+                    "• Each chapter costs varies\n" +
+                    "• Purchased chapters are yours forever!"
+        )
+        builder.setPositiveButton("Open Token Shop") { _, _ ->
+            openTokenShop()
+        }
+        builder.setNegativeButton("Close", null)
+        builder.show()
+    }
+
+    private fun showGetTokensDialog() {
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Get More Tokens")
+        builder.setMessage(
+            "You need more tokens to unlock this chapter!\n\n" +
+                    "Ways to get tokens:\n" +
+                    "• Purchase token packages\n" +
+                    "• Daily login bonus\n" +
+                    "• Complete comics\n" +
+                    "• Special events & promotions"
+        )
+
+        builder.setPositiveButton("Open Token Shop") { _, _ ->
+            openTokenShop()
+        }
+
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
+    }
+
 }

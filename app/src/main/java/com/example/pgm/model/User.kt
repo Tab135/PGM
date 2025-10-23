@@ -7,5 +7,8 @@ data class User(
     val name: String,
     val phone: String = "",
     val address: String = "",
-    val profileImage: String? = null
+    val profileImage: String? = null,
+    val role: String = "user",
+    val tokens: Int = 100
+
 )

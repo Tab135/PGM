@@ -1,16 +1,15 @@
 package com.example.pgm.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pgm.R
 import com.example.pgm.model.Comic
 import com.example.pgm.view.Comic.ComicViewerActivity
@@ -24,16 +23,30 @@ class AdminActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdminComicAdapter
     private lateinit var comicController: ComicController
-    private lateinit var chapterController: ChapterController  // THÊM DÒNG NÀY
+    private lateinit var chapterController: ChapterController
     private lateinit var fabAdd: FloatingActionButton
     private var comicsList: MutableList<Comic> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check if user is admin
+        checkAdminAccess()
+
         setContentView(R.layout.activity_admin)
 
         initViews()
         loadComics()
+    }
+
+    private fun checkAdminAccess() {
+        val sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val userRole = sharedPreferences.getString("userRole", "user")
+
+        if (userRole != "admin") {
+            Toast.makeText(this, "Access denied. Admin only.", Toast.LENGTH_SHORT).show()
+            finish()
+        }
     }
 
     private fun initViews() {
@@ -42,7 +55,7 @@ class AdminActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         comicController = ComicController(this)
-        chapterController = ChapterController(this)  // THÊM DÒNG NÀY
+        chapterController = ChapterController(this)
 
         fabAdd.setOnClickListener {
             val intent = Intent(this, AddEditComicActivity::class.java)
@@ -56,7 +69,7 @@ class AdminActivity : AppCompatActivity() {
 
         adapter = AdminComicAdapter(
             comicsList,
-            chapterController,  // TRUYỀN CHAPTER CONTROLLER VÀO
+            chapterController,
             onEdit = { comic ->
                 val intent = Intent(this, AddEditComicActivity::class.java).apply {
                     putExtra("comic_id", comic.id)
@@ -135,11 +148,23 @@ class AdminActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                finish()
+                logout()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun logout() {
+        // Clear user session
+        val sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+
+        // Navigate to login
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun searchComics(query: String) {

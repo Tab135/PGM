@@ -19,7 +19,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Back button and Subscribe -->
+            <!-- Back button, Token Balance, and Action buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,6 +36,43 @@
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:padding="4dp" />
 
+                <!-- Token Balance Display and Shop Button -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="12dp"
+                    android:gravity="center_vertical">
+
+                    <!-- Token Balance -->
+                    <TextView
+                        android:id="@+id/tokenBalanceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🪙 100"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/token_background"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:visibility="gone" />
+
+                    <!-- Shop Button -->
+                    <ImageView
+                        android:id="@+id/shopButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_shopping_cart"
+                        android:tint="@android:color/white"
+                        android:background="@drawable/shop_button_background"
+                        android:padding="6dp"
+                        android:visibility="gone"
+                        android:contentDescription="Token Shop" />
+
+                </LinearLayout>
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
@@ -49,10 +86,20 @@
                     app:cardBackgroundColor="@android:color/white"
                     app:cardElevation="0dp">
 
+                    <TextView
+                        android:id="@+id/subscribeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:text="+ Subscribe"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                 </androidx.cardview.widget.CardView>
 
-                <!-- FEEDBACK BUTTON - MOVED HERE -->
-
+                <!-- FEEDBACK BUTTON -->
                 <ImageView
                     android:id="@+id/feedbackButton"
                     android:layout_width="24dp"
@@ -63,17 +110,6 @@
                     android:padding="4dp"
                     android:src="@android:drawable/ic_menu_edit"
                     android:tint="@android:color/white" />
-
-                <TextView
-                    android:id="@+id/subscribeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="8dp"
-                    android:text="+ Subscribe"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/infoButton"
@@ -97,6 +133,7 @@
 
             </LinearLayout>
 
+            <!-- Rest of your existing layout remains the same -->
             <!-- Comic Info -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -248,6 +285,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Rest of your existing layout remains the same -->
     <!-- Tabs -->
     <LinearLayout
         android:layout_width="match_parent"
