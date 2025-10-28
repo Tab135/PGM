@@ -11,7 +11,7 @@ import com.example.pgm.model.Comic
 import com.bumptech.glide.Glide
 
 class ComicAdapter(
-    private val comics: List<Comic>,
+    private var comics: List<Comic>, // Changed to var for updateData
     private val onClick: (Comic) -> Unit
 ) : RecyclerView.Adapter<ComicAdapter.ComicViewHolder>() {
 
@@ -25,6 +25,11 @@ class ComicAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_comic, parent, false)
         return ComicViewHolder(view)
+    }
+
+    fun updateData(newComics: List<Comic>) {
+        comics = newComics
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ComicViewHolder, position: Int) {

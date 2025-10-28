@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +17,7 @@ import com.example.pgm.Controller.ChapterController
 import com.example.pgm.Controller.ComicController
 import com.example.pgm.view.Admin.AdminComicAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
 
 class AdminActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -25,7 +25,9 @@ class AdminActivity : AppCompatActivity() {
     private lateinit var comicController: ComicController
     private lateinit var chapterController: ChapterController
     private lateinit var fabAdd: FloatingActionButton
+    private lateinit var searchEditText: TextInputEditText
     private var comicsList: MutableList<Comic> = mutableListOf()
+    private var allComicsList: MutableList<Comic> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +39,7 @@ class AdminActivity : AppCompatActivity() {
 
         initViews()
         loadComics()
+        setupSearch()
     }
 
     private fun checkAdminAccess() {
@@ -52,6 +55,8 @@ class AdminActivity : AppCompatActivity() {
     private fun initViews() {
         recyclerView = findViewById(R.id.adminRecyclerView)
         fabAdd = findViewById(R.id.fabAddComic)
+        searchEditText = findViewById(R.id.searchEditText) // Updated this line
+
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         comicController = ComicController(this)
@@ -63,10 +68,46 @@ class AdminActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadComics() {
-        comicsList.clear()
-        comicsList.addAll(comicController.getAllComics())
+    private fun setupSearch() {
+        searchEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s?.toString() ?: ""
+                if (query.isEmpty()) {
+                    loadComics()
+                } else {
+                    searchComics(query)
+                }
+            }
+
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+
+        // Optional: Handle search action on keyboard
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH) {
+                // Hide keyboard when search is performed
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    private fun loadComics() {
+        allComicsList.clear()
+        allComicsList.addAll(comicController.getAllComics())
+
+        comicsList.clear()
+        comicsList.addAll(allComicsList)
+
+        setupAdapter()
+    }
+
+    private fun setupAdapter() {
         adapter = AdminComicAdapter(
             comicsList,
             chapterController,
@@ -113,6 +154,7 @@ class AdminActivity : AppCompatActivity() {
     private fun deleteComic(comic: Comic) {
         if (comicController.deleteComic(comic.id)) {
             comicsList.remove(comic)
+            allComicsList.remove(comic)
             adapter.notifyDataSetChanged()
             Toast.makeText(this, "Comic deleted successfully", Toast.LENGTH_SHORT).show()
         } else {
@@ -122,26 +164,6 @@ class AdminActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.admin_menu, menu)
-
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem?.actionView as? SearchView
-
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { searchComics(it) }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText.isNullOrEmpty()) {
-                    loadComics()
-                } else {
-                    searchComics(newText)
-                }
-                return true
-            }
-        })
-
         return true
     }
 
@@ -168,10 +190,23 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun searchComics(query: String) {
-        val searchResults = comicController.searchComics(query)
+        val searchQuery = query.lowercase().trim()
+
+        // Filter comics by both title and author name
+        val filteredList = allComicsList.filter { comic ->
+            val titleMatch = comic.title.lowercase().contains(searchQuery)
+            val authorMatch = comic.author?.lowercase()?.contains(searchQuery) ?: false
+            titleMatch || authorMatch
+        }
+
         comicsList.clear()
-        comicsList.addAll(searchResults)
+        comicsList.addAll(filteredList)
         adapter.notifyDataSetChanged()
+
+        // Optional: Show a message if no results found
+        if (filteredList.isEmpty()) {
+            Toast.makeText(this, "No comics found for '$query'", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -16,31 +16,44 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="101dp"
+            android:background="?attr/colorPrimary"
+            android:paddingTop="15pt"
+            app:contentInsetEnd="16dp"
+            app:contentInsetStart="16dp"
+            app:elevation="4dp"
+            app:menu="@menu/toolbar_menu"
             app:title="My Comics"
-            app:titleTextColor="@color/white">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnProfile"
-                style="@style/Widget.Material3.Button.TextButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="8dp"
-                android:icon="@drawable/ic_person"
-                app:iconTint="@color/white" />
-
-        </com.google.android.material.appbar.MaterialToolbar>
+            app:titleTextAppearance="@style/ToolbarTitleStyle"
+            app:titleTextColor="@color/white" />
 
         <!-- Search Bar -->
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/searchBar"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
-            android:hint="Search comics..." />
+            app:boxBackgroundMode="filled"
+            app:boxBackgroundColor="@android:color/white"
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@color/black"
+
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:textColor="@android:color/black"
+                android:textColorHint="@color/dark_gray" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Filter Chips -->
         <HorizontalScrollView
@@ -138,13 +151,15 @@
                             android:text="0"
                             android:textSize="24sp"
                             android:textStyle="bold"
+                            android:textColor="?attr/colorPrimary"
                             tools:text="42" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Total"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
 
                     <!-- Reading -->
@@ -162,13 +177,15 @@
                             android:text="0"
                             android:textSize="24sp"
                             android:textStyle="bold"
+                            android:textColor="?attr/colorPrimary"
                             tools:text="12" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Reading"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
 
                     <!-- Completed -->
@@ -186,13 +203,15 @@
                             android:text="0"
                             android:textSize="24sp"
                             android:textStyle="bold"
+                            android:textColor="?attr/colorPrimary"
                             tools:text="30" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Completed"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -218,14 +237,17 @@
                     android:layout_weight="1"
                     android:text="All Comics"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSort"
                     style="@style/Widget.Material3.Button.TextButton.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sort" />
+                    android:text="Sort"
+                    app:icon="@drawable/ic_sort"
+                    app:iconGravity="textEnd" />
             </LinearLayout>
 
             <!-- RecyclerView -->
@@ -253,16 +275,19 @@
                 android:gravity="center"
                 android:visibility="gone"
                 android:layout_marginTop="80dp"
+                android:padding="16dp"
                 app:layout_constraintTop_toBottomOf="@id/sectionHeader"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
+                <!-- Using a built-in icon or create a simple vector -->
                 <ImageView
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:src="@drawable/ic_person"
-                    android:alpha="0.5" />
+                    android:src="@drawable/ic_baseline_menu_book_24"
+                    android:alpha="0.3"
+                    android:tint="?attr/colorOnSurfaceVariant" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -270,14 +295,27 @@
                     android:layout_marginTop="16dp"
                     android:text="No comics yet"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Start adding comics to your collection"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:gravity="center" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Add First Comic"
+                    style="@style/Widget.Material3.Button"
+                    app:icon="@drawable/ic_add"
+                    android:onClick="onAddFirstComicClick" />
+
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -291,6 +329,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="Add Comic"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

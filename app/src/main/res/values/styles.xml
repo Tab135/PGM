@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Toolbar Title Style -->
+    <style name="ToolbarTitleStyle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Toolbar Button Style -->
+    <style name="ToolbarButtonStyle" parent="Widget.Material3.Button.TextButton.Icon">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="cornerRadius">20dp</item>
+    </style>
+
+    <!-- Alternative if you want a filled button -->
+    <style name="ToolbarFilledButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="backgroundTint">@color/white_20</item>
+    </style>
+</resources>

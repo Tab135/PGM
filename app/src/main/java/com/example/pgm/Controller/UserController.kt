@@ -175,8 +175,8 @@ class UserController(private val context: Context, private val view: View, priva
                 if (file.exists()) {
                     Glide.with(context)
                         .load(file)
-                        .placeholder(R.drawable.ic_person)
-                        .error(R.drawable.ic_person)
+                        .placeholder(R.drawable.ic_person_enhanced)
+                        .error(R.drawable.ic_person_enhanced)
                         .into(profileImage)
                     return
                 }
@@ -185,7 +185,7 @@ class UserController(private val context: Context, private val view: View, priva
             }
         }
         // Set default image if no profile image exists
-        profileImage.setImageResource(R.drawable.ic_person)
+        profileImage.setImageResource(R.drawable.ic_person_enhanced)
     }
 
 

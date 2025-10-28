@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/btnProfile"
-        android:icon="@drawable/ic_person"
+        android:icon="@drawable/ic_person_enhanced"
         android:iconTint="@color/white"
         android:title="Profile"
         app:showAsAction="always" />
