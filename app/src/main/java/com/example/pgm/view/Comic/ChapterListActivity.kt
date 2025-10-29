@@ -38,8 +38,7 @@ class ChapterListActivity : AppCompatActivity() {
     private lateinit var comicTitle: TextView
     private lateinit var comicAuthor: TextView
     private lateinit var comicGenre: TextView
-    private lateinit var viewCount: TextView
-    private lateinit var subscriberCount: TextView
+
     private lateinit var rating: TextView
     private lateinit var backButton: ImageView
     private lateinit var feedbackButton: ImageView
@@ -78,8 +77,6 @@ class ChapterListActivity : AppCompatActivity() {
         comicTitle = findViewById(R.id.comicTitle)
         comicAuthor = findViewById(R.id.comicAuthor)
         comicGenre = findViewById(R.id.comicGenre)
-        viewCount = findViewById(R.id.viewCount)
-        subscriberCount = findViewById(R.id.subscriberCount)
         rating = findViewById(R.id.rating)
         backButton = findViewById(R.id.backButton)
         feedbackButton = findViewById(R.id.feedbackButton)
@@ -168,8 +165,7 @@ class ChapterListActivity : AppCompatActivity() {
             comicGenre.text = "Romance" // Default genre
 
             // Set sample stats
-            viewCount.text = "1.7M"
-            subscriberCount.text = "122,034"
+
 
             // Load feedback rating
             loadFeedbackRating()
@@ -184,13 +180,9 @@ class ChapterListActivity : AppCompatActivity() {
                 if (overallProgress > 0) {
                     comicGenre.text = "Romance • ${overallProgress}% completed • ${history.viewedChapters.size}/${totalChapters} chapters"
 
-                    if (history.readingStreak > 0) {
-                        viewCount.text = "${history.readingStreak} day streak"
-                    }
 
-                    if (history.isFavorite) {
-                        subscriberCount.text = "⭐ Favorited"
-                    }
+
+
                 }
             }
 

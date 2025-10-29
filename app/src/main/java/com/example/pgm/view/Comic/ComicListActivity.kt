@@ -26,7 +26,6 @@ class ComicListActivity : AppCompatActivity() {
     private lateinit var userComicHistoryController: UserComicHistoryController
     private lateinit var sessionManager: SessionManager
     private lateinit var toolbar: MaterialToolbar
-    private lateinit var fabAddComic: FloatingActionButton
     private lateinit var searchEditText: TextInputEditText
     private var allComics = listOf<com.example.pgm.model.Comic>()
     private var filteredComics = listOf<com.example.pgm.model.Comic>()
@@ -39,7 +38,6 @@ class ComicListActivity : AppCompatActivity() {
         setupControllers()
         loadUserSession()
         setupToolbar()
-        setupFAB()
         setupRecyclerView()
         setupSearchAndFilter()
         setupStats()
@@ -60,12 +58,7 @@ class ComicListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
     }
 
-    private fun setupFAB() {
-        fabAddComic = findViewById(R.id.fabAddComic)
-        fabAddComic.setOnClickListener {
-            showAddComicDialog()
-        }
-    }
+
 
     private fun setupRecyclerView() {
         recyclerView = findViewById(R.id.comicRecyclerView)
@@ -321,10 +314,7 @@ class ComicListActivity : AppCompatActivity() {
                 inputMethodManager.showSoftInput(searchEditText, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
                 true
             }
-            R.id.action_filter -> {
-                openFilter()
-                true
-            }
+
             R.id.action_profile -> {
                 goToProfile()
                 true

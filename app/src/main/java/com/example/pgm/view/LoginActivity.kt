@@ -1,8 +1,10 @@
 package com.example.pgm.view
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -18,6 +20,7 @@ import com.example.pgm.utils.SessionManager
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var sessionManager: SessionManager
+    private lateinit var forgotPasswordText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +50,23 @@ class LoginActivity : AppCompatActivity() {
         // Setup LoginController
         LoginController(this, findViewById(R.id.loginContainer))
 
+        // Setup Forgot Password functionality
+        setupForgotPassword()
+
         // Temporary: Debug all users in database
         debugAllUsers()
+    }
+
+    private fun setupForgotPassword() {
+        forgotPasswordText = findViewById(R.id.forgotPasswordText)
+        forgotPasswordText.setOnClickListener {
+            navigateToForgotPassword()
+        }
+    }
+
+    private fun navigateToForgotPassword() {
+        val intent = Intent(this, ForgotPasswordActivity::class.java)
+        startActivity(intent)
     }
 
     private fun initializeTestData() {

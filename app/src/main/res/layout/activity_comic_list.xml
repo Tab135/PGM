@@ -321,15 +321,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddComic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="Add Comic"
-        app:srcCompat="@drawable/ic_add"
-        app:tint="@color/white" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

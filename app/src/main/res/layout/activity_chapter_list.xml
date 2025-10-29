@@ -111,25 +111,7 @@
                     android:src="@android:drawable/ic_menu_edit"
                     android:tint="@android:color/white" />
 
-                <ImageView
-                    android:id="@+id/infoButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_menu_info_details"
-                    android:tint="@android:color/white"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:padding="4dp"
-                    android:layout_marginStart="8dp" />
 
-                <ImageView
-                    android:id="@+id/moreButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_menu_more"
-                    android:tint="@android:color/white"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:padding="4dp"
-                    android:layout_marginStart="8dp" />
 
             </LinearLayout>
 
@@ -208,42 +190,12 @@
                         android:gravity="center_vertical">
 
                         <!-- Views -->
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@android:drawable/ic_menu_view"
-                            android:tint="@android:color/white"
-                            android:alpha="0.7" />
 
-                        <TextView
-                            android:id="@+id/viewCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1.7M"
-                            android:textColor="@android:color/white"
-                            android:textSize="14sp"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginEnd="16dp"
-                            android:alpha="0.8" />
 
                         <!-- Likes -->
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@android:drawable/btn_star_big_on"
-                            android:tint="@android:color/white"
-                            android:alpha="0.7" />
 
-                        <TextView
-                            android:id="@+id/subscriberCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="122,034"
-                            android:textColor="@android:color/white"
-                            android:textSize="14sp"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginEnd="16dp"
-                            android:alpha="0.8" />
+
+
 
                         <!-- Rating -->
                         <ImageView
