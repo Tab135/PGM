@@ -49,7 +49,9 @@ class AddEditChapterActivity : AppCompatActivity() {
 
         comicId = intent.getIntExtra("comicId", -1)
         chapterId = intent.getIntExtra("chapterId", -1)
-        mode = intent.getStringExtra("mode") ?: "add"
+
+        // Tự động detect mode dựa vào chapterId
+        mode = if (chapterId != -1) "edit" else "add"
 
         if (comicId == -1) {
             Toast.makeText(this, "Invalid comic ID", Toast.LENGTH_SHORT).show()
@@ -60,7 +62,8 @@ class AddEditChapterActivity : AppCompatActivity() {
         initViews()
         setupController()
 
-        if (mode == "edit" && chapterId != -1) {
+        // Đơn giản hóa điều kiện
+        if (mode == "edit") {
             loadChapterData()
         }
 
