@@ -6,9 +6,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -19,6 +21,8 @@ import com.example.pgm.utils.SessionManager
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var userController: UserController
+    private lateinit var sessionManager: SessionManager
+    private lateinit var logoutButton: Button
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
@@ -50,22 +54,59 @@ class ProfileActivity : AppCompatActivity() {
             insets
         }
 
-        // Initialize the controller
-        val sessionManager = SessionManager(this)
+        // Initialize SessionManager
+        sessionManager = SessionManager(this)
         val userId = sessionManager.getUserId()
         android.util.Log.d("ProfileActivity", "Received User ID: $userId")
 
         initializeController(userId)
 
+        // Setup Logout button
+        setupLogoutButton()
     }
 
     private fun initializeController(userId : Int) {
-        userController = UserController(this, findViewById(R.id.profileContainer),userId)
+        userController = UserController(this, findViewById(R.id.profileContainer), userId)
 
         // Set up the image selection callback after controller is initialized
         userController.onImageSelectClick = {
             checkPermissionAndSelectImage()
         }
+    }
+
+    private fun setupLogoutButton() {
+        logoutButton = findViewById(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            showLogoutConfirmation()
+        }
+    }
+
+    private fun showLogoutConfirmation() {
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                logout()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun logout() {
+        // Clear session
+        sessionManager.clearSession()
+
+        // Clear SharedPreferences
+        val sharedPreferences = getSharedPreferences("UserPrefs", android.content.Context.MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+
+        // Navigate to LoginActivity
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+        finish()
     }
 
     private fun checkPermissionAndSelectImage() {
