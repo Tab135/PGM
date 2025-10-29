@@ -179,10 +179,6 @@ class ChapterListActivity : AppCompatActivity() {
 
                 if (overallProgress > 0) {
                     comicGenre.text = "Romance • ${overallProgress}% completed • ${history.viewedChapters.size}/${totalChapters} chapters"
-
-
-
-
                 }
             }
 
@@ -219,8 +215,7 @@ class ChapterListActivity : AppCompatActivity() {
             chapters = chapters,
             userComicHistory = userComicHistory,
             highestChapterRead = highestChapterRead,
-            onChapterClick = { chapter -> openChapter(chapter) },
-            onLikeClick = { chapter -> toggleChapterLike(chapter) }
+            onChapterClick = { chapter -> openChapter(chapter) }
         )
         recyclerView.adapter = adapter
     }
@@ -342,24 +337,6 @@ class ChapterListActivity : AppCompatActivity() {
         loadChapters()
         loadFeedbackRating()
         updateTokenDisplay() // Refresh token balance
-    }
-
-    private fun toggleChapterLike(chapter: Chapter) {
-        // Update user comic history if user is logged in
-        if (currentUserId != -1) {
-            userComicHistoryController.toggleChapterLike(currentUserId, comicId, chapter.id)
-
-            // Update local history object
-            userComicHistory = userComicHistoryController.getOrCreateUserComicHistory(currentUserId, comicId)
-        }
-
-        val success = chapterController.updateChapterLike(
-            chapter.id,
-            chapter.likeCount
-        )
-
-        // Refresh the list to show updated like status
-        loadChapters()
     }
 
     private fun showUnlockDialog(chapter: Chapter) {

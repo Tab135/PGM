@@ -155,12 +155,10 @@ class ComicListActivity : AppCompatActivity() {
             
             findViewById<android.widget.TextView>(R.id.tvTotalCount).text = totalComicsInDb.toString()
             findViewById<android.widget.TextView>(R.id.tvReadingCount).text = stats.reading.toString()
-            findViewById<android.widget.TextView>(R.id.tvCompletedCount).text = stats.completed.toString()
         } else {
-            // User not logged in - show total comics but 0 for reading/completed
+            // User not logged in - show total comics but 0 for reading
             findViewById<android.widget.TextView>(R.id.tvTotalCount).text = totalComicsInDb.toString()
             findViewById<android.widget.TextView>(R.id.tvReadingCount).text = "0"
-            findViewById<android.widget.TextView>(R.id.tvCompletedCount).text = "0"
         }
     }
 
@@ -204,7 +202,7 @@ class ComicListActivity : AppCompatActivity() {
         // If user is not logged in, we can't filter by reading status
         if (currentUserId == -1) {
             return when {
-                checkedIds.contains(R.id.chipReading) || checkedIds.contains(R.id.chipCompleted) -> emptyList()
+                checkedIds.contains(R.id.chipReading) -> emptyList()
                 checkedIds.contains(R.id.chipFavorites) -> emptyList()
                 else -> comics
             }
@@ -219,12 +217,8 @@ class ComicListActivity : AppCompatActivity() {
             
             when {
                 checkedIds.contains(R.id.chipReading) -> {
-                    // Filter comics that are being read (viewed but not completed)
-                    history != null && history.viewedChapters.isNotEmpty() && !history.isCompleted
-                }
-                checkedIds.contains(R.id.chipCompleted) -> {
-                    // Filter comics that are completed
-                    history != null && history.isCompleted
+                    // Filter comics that are being read (has viewed chapters)
+                    history != null && history.viewedChapters.isNotEmpty()
                 }
                 checkedIds.contains(R.id.chipFavorites) -> {
                     // Filter favorite comics
@@ -245,7 +239,6 @@ class ComicListActivity : AppCompatActivity() {
 
         val baseTitle = when {
             checkedIds.contains(R.id.chipReading) -> "Reading Comics"
-            checkedIds.contains(R.id.chipCompleted) -> "Completed Comics"
             checkedIds.contains(R.id.chipFavorites) -> "Favorite Comics"
             else -> "All Comics"
         }
@@ -352,11 +345,6 @@ class ComicListActivity : AppCompatActivity() {
             .create()
         dialog.show()
         */
-    }
-
-    fun onAddFirstComicClick(view: android.view.View) {
-        // This function is called from XML onClick attribute
-        showAddComicDialog()
     }
 
     // Refresh data when returning to activity

@@ -17,8 +17,7 @@ class ChapterAdapter(
     private val chapters: List<Chapter>,
     private val userComicHistory: UserComicHistory? = null,
     private val highestChapterRead: Int = 0,
-    private val onChapterClick: (Chapter) -> Unit,
-    private val onLikeClick: (Chapter) -> Unit
+    private val onChapterClick: (Chapter) -> Unit
 ) : RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
 
     class ChapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -54,17 +53,6 @@ class ChapterAdapter(
                 .load(url)
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.chapterThumbnail)
-        }
-
-        // Handle like status - check both chapter and user history
-        val isLiked = userComicHistory?.likedChapters?.contains(chapter.id) ?: false
-
-        if (isLiked) {
-            holder.likeIcon.setImageResource(android.R.drawable.btn_star_big_on)
-            holder.likeIcon.setColorFilter(Color.YELLOW)
-        } else {
-            holder.likeIcon.setImageResource(android.R.drawable.btn_star_big_off)
-            holder.likeIcon.setColorFilter(Color.GRAY)
         }
 
         // Handle lock status and cost (consider purchased chapters)
@@ -147,7 +135,6 @@ class ChapterAdapter(
 
         // Set click listeners
         holder.itemView.setOnClickListener { onChapterClick(chapter) }
-        holder.likeIcon.setOnClickListener { onLikeClick(chapter) }
 
         // Long click to bookmark (if needed)
         holder.itemView.setOnLongClickListener {

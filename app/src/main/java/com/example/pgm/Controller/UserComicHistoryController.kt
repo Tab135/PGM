@@ -32,7 +32,6 @@ class UserComicHistoryController(private val context: Context) {
             currentPage = currentPage,
             lastViewedPage = currentPage,
             latestViewedChapter = chapterId,
-            lastReadingDate = Date(),
             updatedAt = Date()
         )
     }
@@ -76,34 +75,6 @@ class UserComicHistoryController(private val context: Context) {
     }
 
     /**
-     * Add liked chapter
-     */
-    private fun addLikedChapterHelper(history: UserComicHistory, chapterId: Int): UserComicHistory {
-        val updatedLikedChapters = history.likedChapters.toMutableList()
-        if (!updatedLikedChapters.contains(chapterId)) {
-            updatedLikedChapters.add(chapterId)
-        }
-        
-        return history.copy(
-            likedChapters = updatedLikedChapters,
-            updatedAt = Date()
-        )
-    }
-
-    /**
-     * Remove liked chapter
-     */
-    private fun removeLikedChapterHelper(history: UserComicHistory, chapterId: Int): UserComicHistory {
-        val updatedLikedChapters = history.likedChapters.toMutableList()
-        updatedLikedChapters.remove(chapterId)
-        
-        return history.copy(
-            likedChapters = updatedLikedChapters,
-            updatedAt = Date()
-        )
-    }
-
-    /**
      * Add purchased chapter
      */
     private fun addPurchasedChapterHelper(history: UserComicHistory, chapterId: Int): UserComicHistory {
@@ -114,41 +85,6 @@ class UserComicHistoryController(private val context: Context) {
 
         return history.copy(
             purchasedChapters = updatedPurchased,
-            updatedAt = Date()
-        )
-    }
-
-    /**
-     * Update reading streak
-     */
-    private fun updateReadingStreakHelper(history: UserComicHistory): UserComicHistory {
-        val today = Calendar.getInstance()
-        val lastRead = Calendar.getInstance()
-        
-        history.lastReadingDate?.let { lastRead.time = it }
-        
-        val daysDifference = ((today.timeInMillis - lastRead.timeInMillis) / (1000 * 60 * 60 * 24)).toInt()
-        
-        val newStreak = when {
-            daysDifference == 0 -> history.readingStreak // Same day
-            daysDifference == 1 -> history.readingStreak + 1 // Next day
-            else -> 1 // Reset streak
-        }
-        
-        return history.copy(
-            readingStreak = newStreak,
-            updatedAt = Date()
-        )
-    }
-
-    /**
-     * Mark comic as completed
-     */
-    private fun markAsCompletedHelper(history: UserComicHistory, totalChaptersInComic: Int): UserComicHistory {
-        return history.copy(
-            isCompleted = true,
-            readingProgress = 1.0f,
-            totalChaptersRead = totalChaptersInComic,
             updatedAt = Date()
         )
     }
@@ -169,14 +105,9 @@ class UserComicHistoryController(private val context: Context) {
      */
     private fun getReadingSummaryHelper(history: UserComicHistory): ReadingSummary {
         return ReadingSummary(
-            totalChaptersRead = history.totalChaptersRead,
             totalReadingTime = history.totalReadingTime,
-            readingStreak = history.readingStreak,
-            favoriteChapters = history.likedChapters.size,
             bookmarkedChapters = history.bookmarkedChapters.size,
-            overallProgress = history.readingProgress,
-            isCompleted = history.isCompleted,
-            lastReadingDate = history.lastReadingDate
+            overallProgress = history.readingProgress
         )
     }
 
@@ -186,23 +117,11 @@ class UserComicHistoryController(private val context: Context) {
     private fun checkAchievementsHelper(history: UserComicHistory): List<Achievement> {
         val achievements = mutableListOf<Achievement>()
         
-        // Reading streak achievements
-        when (history.readingStreak) {
-            7 -> achievements.add(Achievement("Week Warrior", "Read for 7 consecutive days!"))
-            30 -> achievements.add(Achievement("Monthly Master", "Read for 30 consecutive days!"))
-            100 -> achievements.add(Achievement("Century Reader", "Read for 100 consecutive days!"))
-        }
-        
-        // Chapter achievements
-        when (history.totalChaptersRead) {
+        // Chapter achievements based on viewed chapters count
+        when (history.viewedChapters.size) {
             10 -> achievements.add(Achievement("Chapter Champion", "Read 10 chapters!"))
             50 -> achievements.add(Achievement("Reading Enthusiast", "Read 50 chapters!"))
             100 -> achievements.add(Achievement("Page Turner", "Read 100 chapters!"))
-        }
-        
-        // Completion achievement
-        if (history.isCompleted) {
-            achievements.add(Achievement("Comic Completed", "Finished reading the entire comic!"))
         }
         
         return achievements
@@ -246,14 +165,10 @@ class UserComicHistoryController(private val context: Context) {
             history = history.copy(
                 viewedChapters = updatedViewedChapters,
                 latestViewedChapter = chapterId,
-                totalChaptersRead = updatedViewedChapters.size,
-                lastReadingDate = Date(),
                 updatedAt = Date()
             )
             
-            val streakUpdatedHistory = updateReadingStreakHelper(history)
-            
-            dbHelper.insertOrUpdateUserComicHistory(streakUpdatedHistory)
+            dbHelper.insertOrUpdateUserComicHistory(history)
             Log.d(TAG, "Recorded chapter $chapterId viewed for user $userId, comic $comicId")
             true
         } catch (e: Exception) {
@@ -335,33 +250,6 @@ class UserComicHistoryController(private val context: Context) {
             false
         }
     }
-    
-    /**
-     * Toggle like status for a chapter
-     */
-    fun toggleChapterLike(userId: Int, comicId: Int, chapterId: Int): Boolean {
-        return try {
-            val history = getOrCreateUserComicHistory(userId, comicId)
-            
-            // Check if chapter is currently liked
-            val isCurrentlyLiked = history.likedChapters.contains(chapterId)
-            
-            val updatedHistory = if (isCurrentlyLiked) {
-                // Currently liked, so unlike it
-                removeLikedChapterHelper(history, chapterId)
-            } else {
-                // Not liked, so like it
-                addLikedChapterHelper(history, chapterId)
-            }
-            
-            dbHelper.insertOrUpdateUserComicHistory(updatedHistory)
-            Log.d(TAG, "Toggled like for user $userId, comic $comicId, chapter $chapterId. Now liked: ${!isCurrentlyLiked}")
-            true
-        } catch (e: Exception) {
-            Log.e(TAG, "Error toggling chapter like", e)
-            false
-        }
-    }
 
     /**
      * Record that a chapter was purchased/unlocked by the user
@@ -386,14 +274,6 @@ class UserComicHistoryController(private val context: Context) {
     fun isChapterPurchased(userId: Int, comicId: Int, chapterId: Int): Boolean {
         val history = dbHelper.getUserComicHistory(userId, comicId)
         return history?.purchasedChapters?.contains(chapterId) ?: false
-    }
-    
-    /**
-     * Check if a chapter is liked by the user
-     */
-    fun isChapterLiked(userId: Int, comicId: Int, chapterId: Int): Boolean {
-        val history = dbHelper.getUserComicHistory(userId, comicId)
-        return history?.likedChapters?.contains(chapterId) ?: false
     }
     
     /**
@@ -434,49 +314,6 @@ class UserComicHistoryController(private val context: Context) {
     }
 
     /**
-     * Update reading preferences
-     */
-    fun updateReadingPreferences(
-        userId: Int, 
-        comicId: Int, 
-        readingMode: ReadingMode,
-        notificationsEnabled: Boolean
-    ): Boolean {
-        return try {
-            val history = getOrCreateUserComicHistory(userId, comicId)
-            val updatedHistory = history.copy(
-                preferredReadingMode = readingMode,
-                notificationsEnabled = notificationsEnabled,
-                updatedAt = Date()
-            )
-            
-            dbHelper.insertOrUpdateUserComicHistory(updatedHistory)
-            Log.d(TAG, "Updated reading preferences for user $userId, comic $comicId")
-            true
-        } catch (e: Exception) {
-            Log.e(TAG, "Error updating reading preferences", e)
-            false
-        }
-    }
-    
-    /**
-     * Mark comic as completed
-     */
-    fun markComicAsCompleted(userId: Int, comicId: Int, totalChaptersInComic: Int): Boolean {
-        return try {
-            val history = getOrCreateUserComicHistory(userId, comicId)
-            val updatedHistory = markAsCompletedHelper(history, totalChaptersInComic)
-            
-            dbHelper.insertOrUpdateUserComicHistory(updatedHistory)
-            Log.d(TAG, "Marked comic as completed for user $userId, comic $comicId")
-            true
-        } catch (e: Exception) {
-            Log.e(TAG, "Error marking comic as completed", e)
-            false
-        }
-    }
-    
-    /**
      * Get overall reading progress for a comic
      */
     fun getOverallProgress(userId: Int, comicId: Int, totalChaptersInComic: Int): Float {
@@ -500,26 +337,22 @@ class UserComicHistoryController(private val context: Context) {
     
     /**
      * Get reading statistics for a user
-     * Returns a map with counts for total, reading, and completed comics
+     * Returns a map with counts for total and reading comics
      */
     fun getUserReadingStatistics(userId: Int): ReadingStatistics {
         val allHistory = dbHelper.getAllUserComicHistories(userId)
         
-        // Reading: user has viewed at least one chapter but hasn't completed
+        // Reading: user has viewed at least one chapter
         val readingCount = allHistory.count { history ->
-            history.viewedChapters.isNotEmpty() && !history.isCompleted
+            history.viewedChapters.isNotEmpty()
         }
-        
-        // Completed: user has marked comic as completed
-        val completedCount = allHistory.count { it.isCompleted }
         
         // Total: all comics the user has interacted with
         val totalCount = allHistory.size
         
         return ReadingStatistics(
             total = totalCount,
-            reading = readingCount,
-            completed = completedCount
+            reading = readingCount
         )
     }
     
@@ -531,14 +364,10 @@ class UserComicHistoryController(private val context: Context) {
         
         return when (status) {
             ReadingStatus.READING -> {
-                // Comics with at least one chapter viewed but not completed
+                // Comics with at least one chapter viewed
                 allHistory.filter { history ->
-                    history.viewedChapters.isNotEmpty() && !history.isCompleted
+                    history.viewedChapters.isNotEmpty()
                 }.map { it.comicId }
-            }
-            ReadingStatus.COMPLETED -> {
-                // Comics marked as completed
-                allHistory.filter { it.isCompleted }.map { it.comicId }
             }
             ReadingStatus.ALL -> {
                 // All comics user has interacted with
@@ -552,14 +381,9 @@ class UserComicHistoryController(private val context: Context) {
  * Data class for reading summary
  */
 data class ReadingSummary(
-    val totalChaptersRead: Int,
     val totalReadingTime: Long,
-    val readingStreak: Int,
-    val favoriteChapters: Int,
     val bookmarkedChapters: Int,
-    val overallProgress: Float,
-    val isCompleted: Boolean,
-    val lastReadingDate: Date?
+    val overallProgress: Float
 )
 
 /**
@@ -576,8 +400,7 @@ data class Achievement(
  */
 data class ReadingStatistics(
     val total: Int,
-    val reading: Int,
-    val completed: Int
+    val reading: Int
 )
 
 /**
@@ -585,6 +408,5 @@ data class ReadingStatistics(
  */
 enum class ReadingStatus {
     ALL,
-    READING,
-    COMPLETED
+    READING
 }

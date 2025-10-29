@@ -58,17 +58,11 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
         const val COLUMN_LATEST_VIEWED_CHAPTER = "latest_viewed_chapter"
         const val COLUMN_CURRENT_PAGE = "current_page"
         const val COLUMN_TOTAL_READING_TIME = "total_reading_time"
-        const val COLUMN_LAST_READING_DATE = "last_reading_date"
         const val COLUMN_BOOKMARKED_CHAPTERS = "bookmarked_chapters"
-        const val COLUMN_LIKED_CHAPTERS = "liked_chapters"
         const val COLUMN_PURCHASED_CHAPTERS = "purchased_chapters"
         const val COLUMN_READING_PROGRESS = "reading_progress"
-        const val COLUMN_IS_COMPLETED = "is_completed"
         const val COLUMN_IS_FAVORITE = "is_favorite"
-        const val COLUMN_NOTIFICATIONS_ENABLED = "notifications_enabled"
         const val COLUMN_LAST_VIEWED_PAGE = "last_viewed_page"
-        const val COLUMN_READING_STREAK = "reading_streak"
-        const val COLUMN_TOTAL_CHAPTERS_READ = "total_chapters_read"
         const val COLUMN_CREATED_AT = "created_at"
         const val COLUMN_UPDATED_AT = "updated_at"
 
@@ -170,17 +164,11 @@ open class BaseDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
                 $COLUMN_LATEST_VIEWED_CHAPTER INTEGER,
                 $COLUMN_CURRENT_PAGE INTEGER DEFAULT 0,
                 $COLUMN_TOTAL_READING_TIME INTEGER DEFAULT 0,
-                $COLUMN_LAST_READING_DATE TEXT,
                 $COLUMN_BOOKMARKED_CHAPTERS TEXT DEFAULT '',
-                $COLUMN_LIKED_CHAPTERS TEXT DEFAULT '',
                 $COLUMN_PURCHASED_CHAPTERS TEXT DEFAULT '',
                 $COLUMN_READING_PROGRESS REAL DEFAULT 0.0,
-                $COLUMN_IS_COMPLETED INTEGER DEFAULT 0,
                 $COLUMN_IS_FAVORITE INTEGER DEFAULT 0,
-                $COLUMN_NOTIFICATIONS_ENABLED INTEGER DEFAULT 1,
                 $COLUMN_LAST_VIEWED_PAGE INTEGER DEFAULT 0,
-                $COLUMN_READING_STREAK INTEGER DEFAULT 0,
-                $COLUMN_TOTAL_CHAPTERS_READ INTEGER DEFAULT 0,
                 $COLUMN_CREATED_AT TEXT NOT NULL,
                 $COLUMN_UPDATED_AT TEXT NOT NULL,
                 FOREIGN KEY($COLUMN_HISTORY_USER_ID) REFERENCES $TABLE_USERS($COLUMN_USER_ID),
