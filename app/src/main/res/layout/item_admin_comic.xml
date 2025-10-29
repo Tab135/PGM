@@ -93,15 +93,7 @@
                 android:gravity="end"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/btnView"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="View Comic"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_view"
-                    android:tint="@color/colorPrimary" />
+
 
                 <ImageButton
                     android:id="@+id/btnEdit"

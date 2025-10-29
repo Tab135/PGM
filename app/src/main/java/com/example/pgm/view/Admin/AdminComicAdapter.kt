@@ -27,7 +27,7 @@ class AdminComicAdapter (
         val tvTitle: TextView = itemView.findViewById(R.id.tvComicTitle)
         val tvAuthor: TextView = itemView.findViewById(R.id.tvComicAuthor)
         val tvChapters: TextView = itemView.findViewById(R.id.tvComicChapters)
-        val btnView: ImageButton = itemView.findViewById(R.id.btnView)
+       // val btnView: ImageButton = itemView.findViewById(R.id.btnView)
         val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit)
         val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
         val btnManageChapters: Button = itemView.findViewById(R.id.btnManageChapters)
@@ -60,7 +60,7 @@ class AdminComicAdapter (
         }
 
         // Set click listeners
-        holder.btnView.setOnClickListener { onView(comic) }
+       // holder.btnView.setOnClickListener { onView(comic) }
         holder.btnEdit.setOnClickListener { onEdit(comic) }
         holder.btnDelete.setOnClickListener { onDelete(comic) }
         holder.btnManageChapters.setOnClickListener { onManageChapters(comic) }
