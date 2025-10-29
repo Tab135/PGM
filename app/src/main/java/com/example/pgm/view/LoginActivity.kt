@@ -56,33 +56,33 @@ class LoginActivity : AppCompatActivity() {
         val chapdb = ChapterDatabaseHelper(this)
 
         // ✅ Insert a test comic
-        db.addComic(
-            Comic(
-                title = "testy",
-                author = "Demo Author",
-                pages = null,
-                imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F344513261579032958%2F3172d8c8e90d8be9910ff0e87a3a57b3_400x400.png&f=1&nofb=1&ipt=ff64798cdaaa4726a5c41bea220c20618b781abb2ca474b1cb8cebc11e18488f",
-            )
-        )
-
-        // Demo chapter: locked now, free in 3 days
-        val threeDaysLater = System.currentTimeMillis() + 3L * 24L * 60L * 60L * 1000L
-        chapdb.addChapter(
-            Chapter(
-                id = 1,
-                comicId = 1,
-                chapterNumber = 3,
-                title = "The Beginning of the End",
-                thumbnailUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F344513261579032958%2F3172d8c8e90d8be9910ff0e87a3a57b3_400x400.png&f=1&nofb=1&ipt=ff64798cdaaa4726a5c41bea220c20618b781abb2ca474b1cb8cebc11e18488f",
-                releaseDate = "Jan 01, 2024",
-                likeCount = 15402,
-                pages = 45,
-                cost = 300,
-                isLocked = true,
-                freeDate = threeDaysLater,
-                remoteUrl = "https://www.ics.uci.edu/~magda/cs620/ch4.pdf"
-            )
-        )
+//        db.addComic(
+//            Comic(
+//                title = "testy",
+//                author = "Demo Author",
+//                pages = null,
+//                imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F344513261579032958%2F3172d8c8e90d8be9910ff0e87a3a57b3_400x400.png&f=1&nofb=1&ipt=ff64798cdaaa4726a5c41bea220c20618b781abb2ca474b1cb8cebc11e18488f",
+//            )
+//        )
+//
+//        // Demo chapter: locked now, free in 3 days
+//        val threeDaysLater = System.currentTimeMillis() + 3L * 24L * 60L * 60L * 1000L
+//        chapdb.addChapter(
+//            Chapter(
+//                id = 1,
+//                comicId = 1,
+//                chapterNumber = 3,
+//                title = "The Beginning of the End",
+//                thumbnailUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F344513261579032958%2F3172d8c8e90d8be9910ff0e87a3a57b3_400x400.png&f=1&nofb=1&ipt=ff64798cdaaa4726a5c41bea220c20618b781abb2ca474b1cb8cebc11e18488f",
+//                releaseDate = "Jan 01, 2024",
+//                likeCount = 15402,
+//                pages = 45,
+//                cost = 300,
+//                isLocked = true,
+//                freeDate = threeDaysLater,
+//                remoteUrl = "https://www.ics.uci.edu/~magda/cs620/ch4.pdf"
+//            )
+//        )
     }
 
     private fun debugAllUsers() {

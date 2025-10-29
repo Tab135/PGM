@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        app:title="PDF Viewer"
+        app:title="Comic"
         app:titleTextColor="@android:color/white" />
 
     <!-- PDF Viewer -->
@@ -47,141 +47,50 @@
         android:background="@android:color/white"
         android:elevation="8dp"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="8dp"/>
 
-        <!-- Zoom Controls -->
-        <LinearLayout
-            android:layout_width="match_parent"
+    <!-- Loading Overlay -->
+    <LinearLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/bottomControlsLayout"
+        android:padding="32dp">
+
+        <TextView
+            android:id="@+id/loadingMessage"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="8dp">
+            android:text="Fetching comic..."
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
 
-            <ImageButton
-                android:id="@+id/zoomOutBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Zoom Out"
-                app:tint="?attr/colorPrimary" />
-
-            <TextView
-                android:id="@+id/zoomLevelText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:text="100%"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:id="@+id/zoomInBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Zoom In"
-                android:tint="?attr/colorPrimary" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/fitWidthBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Fit Width"
-                app:tint="?attr/colorPrimary" />
-
-            <ImageButton
-                android:id="@+id/fitHeightBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Fit Height"
-                app:tint="?attr/colorPrimary" />
-
-        </LinearLayout>
-
-        <!-- Navigation Controls -->
-        <LinearLayout
+        <ProgressBar
+            android:id="@+id/loadingProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="@android:color/white"
+            android:progressBackgroundTint="#40FFFFFF" />
+
+        <TextView
+            android:id="@+id/loadingPercentText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/firstPageBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="First Page"
-                app:tint="?attr/colorPrimary" />
-
-            <ImageButton
-                android:id="@+id/prevPageBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Previous Page"
-                android:tint="?attr/colorPrimary" />
-
-            <EditText
-                android:id="@+id/pageNumberInput"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:gravity="center"
-                android:hint="Page"
-                android:inputType="number"
-                android:maxLength="4"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/totalPagesText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="0"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:id="@+id/nextPageBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Next Page"
-                app:tint="?attr/colorPrimary" />
-
-            <ImageButton
-                android:id="@+id/lastPageBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Last Page"
-                app:tint="?attr/colorPrimary" />
-
-        </LinearLayout>
+            android:layout_marginTop="12dp"
+            android:text="0%"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
 
     </LinearLayout>
-    q
-
-    <!-- Progress Bar for loading -->
-    <ProgressBar
-        android:id="@+id/loadingProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
 
 </RelativeLayout>

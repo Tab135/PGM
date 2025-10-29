@@ -42,7 +42,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxBackgroundColor="@color/white">
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/black"
+            android:textColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameInput"
@@ -50,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
                 android:textSize="18sp"
-                android:drawablePadding="8dp"/>
+                android:drawablePadding="8dp"
+                android:textColor="@color/black"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,7 +63,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxBackgroundColor="@color/white">
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/black"
+            android:textColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailInput"
@@ -69,7 +74,8 @@
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:textSize="18sp"
-                android:drawablePadding="8dp"/>
+                android:drawablePadding="8dp"
+                android:textColor="@color/black"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +87,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxBackgroundColor="@color/white"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/colorPrimary">
+            app:passwordToggleTint="@color/colorPrimary"
+            app:hintTextColor="@color/black"
+            android:textColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordInput"
@@ -90,7 +98,8 @@
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:textSize="18sp"
-                android:drawablePadding="8dp"/>
+                android:drawablePadding="8dp"
+                android:textColor="@color/black"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

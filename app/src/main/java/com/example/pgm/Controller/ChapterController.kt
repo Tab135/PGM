@@ -4,14 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.example.pgm.model.Chapter
-import com.example.pgm.model.Database.ChapterDatabaseHelper
+import com.example.pgm.model.Database.DatabaseManager
 import java.io.File
 import java.io.FileOutputStream
 
 class ChapterController(context: Context) {
     private val context: Context = context
 
-    private val chapterDatabaseHelper = ChapterDatabaseHelper(context)
+    private val chapterDatabaseHelper = DatabaseManager.getChapterHelper(context)
 
     fun addChapter(chapter: Chapter): Boolean {
         return chapterDatabaseHelper.addChapter(chapter)

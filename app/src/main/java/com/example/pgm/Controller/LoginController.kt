@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.pgm.R
-import com.example.pgm.model.Database.UserDatabaseHelper
+import com.example.pgm.model.Database.DatabaseManager
 import com.example.pgm.utils.SessionManager
 import com.example.pgm.view.AdminActivity
 import com.example.pgm.view.Comic.ComicListActivity
@@ -24,7 +24,7 @@ class LoginController(private val context: Context, private val view: View) {
     private val registerBtn: Button = view.findViewById(R.id.RegisterBtn)
     private val forgotPasswordText: TextView = view.findViewById(R.id.forgotPasswordText)
 
-    private val databaseHelper = UserDatabaseHelper(context)
+    private val databaseHelper = DatabaseManager.getUserHelper(context)
     private val sessionManager = SessionManager(context) // Use SessionManager instead of direct SharedPreferences
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)

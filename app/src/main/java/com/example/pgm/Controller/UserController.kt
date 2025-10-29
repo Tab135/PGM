@@ -15,7 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.pgm.R
-import com.example.pgm.model.Database.UserDatabaseHelper
+import com.example.pgm.model.Database.DatabaseManager
 import com.example.pgm.model.User
 import com.example.pgm.view.Comic.ComicListActivity
 import java.io.File
@@ -35,7 +35,7 @@ class UserController(private val context: Context, private val view: View, priva
 
     private val changeImageBtn: Button = view.findViewById(R.id.changeImageBtn)
 
-    private val databaseHelper = UserDatabaseHelper(context)
+    private val databaseHelper = DatabaseManager.getUserHelper(context)
     private var currentUser: User? = null
 
     private var selectedImage : Uri? = null;

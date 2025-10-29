@@ -1,7 +1,7 @@
 package com.example.pgm.Controller
 
 import com.example.pgm.model.Comic
-import com.example.pgm.model.Database.ComicDatabaseHelper
+import com.example.pgm.model.Database.DatabaseManager
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -9,7 +9,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 class ComicController(private val context: Context) {
-    private val comicDatabaseHelper = ComicDatabaseHelper(context)
+    private val comicDatabaseHelper = DatabaseManager.getComicHelper(context)
 
     fun addComic(comic: Comic): Boolean {
         return comicDatabaseHelper.addComic(comic)

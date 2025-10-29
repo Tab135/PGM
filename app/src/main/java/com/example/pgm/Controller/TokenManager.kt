@@ -2,16 +2,15 @@ package com.example.pgm.model
 
 import android.content.Context
 import android.util.Log
-import com.example.pgm.model.Database.UserComicHistoryDatabaseHelper
-import com.example.pgm.model.Database.UserDatabaseHelper
+import com.example.pgm.model.Database.DatabaseManager
 
 /**
  * Manager class to handle token-based chapter access
  */
 class TokenManager(private val context: Context) {
 
-    private val userDbHelper = UserDatabaseHelper(context)
-    private val historyDbHelper = UserComicHistoryDatabaseHelper(context)
+    private val userDbHelper = DatabaseManager.getUserHelper(context)
+    private val historyDbHelper = DatabaseManager.getUserComicHistoryHelper(context)
 
     companion object {
         private const val TAG = "TokenManager"

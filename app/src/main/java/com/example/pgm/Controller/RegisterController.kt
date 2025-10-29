@@ -1,6 +1,6 @@
 package com.example.pgm.Controller
 
-import com.example.pgm.model.Database.UserDatabaseHelper
+import com.example.pgm.model.Database.DatabaseManager
 import android.content.Context
 import android.content.Intent
 import android.view.View
@@ -18,7 +18,7 @@ class RegisterController(private val context: Context, private val view: View) {
     private val password: EditText = view.findViewById(R.id.passwordInput)
     private val name: EditText = view.findViewById(R.id.nameInput)
     private val registerBtn: Button = view.findViewById(R.id.RegisterBtn)
-    private val databaseHelper = UserDatabaseHelper(context)
+    private val databaseHelper = DatabaseManager.getUserHelper(context)
 
     init {
         registerBtn.setOnClickListener { registerUser() }

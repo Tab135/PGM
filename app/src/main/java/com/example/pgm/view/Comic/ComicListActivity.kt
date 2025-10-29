@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pgm.R
 import com.example.pgm.Controller.ComicController
+import com.example.pgm.Controller.UserComicHistoryController
+import com.example.pgm.utils.SessionManager
 import com.example.pgm.view.ProfileActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.chip.ChipGroup
@@ -21,21 +23,36 @@ class ComicListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ComicAdapter
     private lateinit var comicController: ComicController
+    private lateinit var userComicHistoryController: UserComicHistoryController
+    private lateinit var sessionManager: SessionManager
     private lateinit var toolbar: MaterialToolbar
     private lateinit var fabAddComic: FloatingActionButton
     private lateinit var searchEditText: TextInputEditText
     private var allComics = listOf<com.example.pgm.model.Comic>()
     private var filteredComics = listOf<com.example.pgm.model.Comic>()
+    private var currentUserId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comic_list)
 
+        setupControllers()
+        loadUserSession()
         setupToolbar()
         setupFAB()
         setupRecyclerView()
         setupSearchAndFilter()
         setupStats()
+    }
+
+    private fun setupControllers() {
+        comicController = ComicController(this)
+        userComicHistoryController = UserComicHistoryController(this)
+        sessionManager = SessionManager(this)
+    }
+
+    private fun loadUserSession() {
+        currentUserId = sessionManager.getUserId()
     }
 
     private fun setupToolbar() {
@@ -54,7 +71,6 @@ class ComicListActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.comicRecyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 3)
 
-        comicController = ComicController(this)
         allComics = comicController.getAllComics()
         filteredComics = allComics
 
@@ -136,15 +152,23 @@ class ComicListActivity : AppCompatActivity() {
     }
 
     private fun updateStats() {
-        val comics = comicController.getAllComics()
-        val totalCount = comics.size
+        // Get all comics from database
+        val allComicsInDb = comicController.getAllComics()
+        val totalComicsInDb = allComicsInDb.size
 
-        findViewById<android.widget.TextView>(R.id.tvTotalCount).text = totalCount.toString()
-
-        // For now, set reading and completed to 0 since we don't have the data
-        // You can update this later when you have the actual data
-        findViewById<android.widget.TextView>(R.id.tvReadingCount).text = "0"
-        findViewById<android.widget.TextView>(R.id.tvCompletedCount).text = "0"
+        if (currentUserId != -1) {
+            // User is logged in - show reading statistics based on user history
+            val stats = userComicHistoryController.getUserReadingStatistics(currentUserId)
+            
+            findViewById<android.widget.TextView>(R.id.tvTotalCount).text = totalComicsInDb.toString()
+            findViewById<android.widget.TextView>(R.id.tvReadingCount).text = stats.reading.toString()
+            findViewById<android.widget.TextView>(R.id.tvCompletedCount).text = stats.completed.toString()
+        } else {
+            // User not logged in - show total comics but 0 for reading/completed
+            findViewById<android.widget.TextView>(R.id.tvTotalCount).text = totalComicsInDb.toString()
+            findViewById<android.widget.TextView>(R.id.tvReadingCount).text = "0"
+            findViewById<android.widget.TextView>(R.id.tvCompletedCount).text = "0"
+        }
     }
 
     private fun updateEmptyState(isEmpty: Boolean) {
@@ -184,22 +208,34 @@ class ComicListActivity : AppCompatActivity() {
             return comics
         }
 
+        // If user is not logged in, we can't filter by reading status
+        if (currentUserId == -1) {
+            return when {
+                checkedIds.contains(R.id.chipReading) || checkedIds.contains(R.id.chipCompleted) -> emptyList()
+                checkedIds.contains(R.id.chipFavorites) -> emptyList()
+                else -> comics
+            }
+        }
+
+        // Fetch all user history once to avoid multiple database calls
+        val allUserHistory = userComicHistoryController.getUserReadingHistory(currentUserId)
+        val historyMap = allUserHistory.associateBy { it.comicId }
+
         return comics.filter { comic ->
+            val history = historyMap[comic.id]
+            
             when {
                 checkedIds.contains(R.id.chipReading) -> {
-                    // Filter logic for reading comics
-                    // Replace with your actual logic
-                    comic.title.contains("a", ignoreCase = true) // Example filter
+                    // Filter comics that are being read (viewed but not completed)
+                    history != null && history.viewedChapters.isNotEmpty() && !history.isCompleted
                 }
                 checkedIds.contains(R.id.chipCompleted) -> {
-                    // Filter logic for completed comics
-                    // Replace with your actual logic
-                    comic.title.length > 5 // Example filter
+                    // Filter comics that are completed
+                    history != null && history.isCompleted
                 }
                 checkedIds.contains(R.id.chipFavorites) -> {
-                    // Filter logic for favorite comics
-                    // Replace with your actual logic
-                    comic.title.contains("e", ignoreCase = true) // Example filter
+                    // Filter favorite comics
+                    history != null && history.isFavorite
                 }
                 else -> true
             }

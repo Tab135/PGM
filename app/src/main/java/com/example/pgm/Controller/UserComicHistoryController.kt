@@ -3,7 +3,7 @@ package com.example.pgm.Controller
 import android.content.Context
 import android.util.Log
 import com.example.pgm.model.*
-import com.example.pgm.model.Database.UserComicHistoryDatabaseHelper
+import com.example.pgm.model.Database.DatabaseManager
 import java.util.*
 
 /**
@@ -11,7 +11,7 @@ import java.util.*
  */
 class UserComicHistoryController(private val context: Context) {
     
-    private val dbHelper = UserComicHistoryDatabaseHelper(context)
+    private val dbHelper = DatabaseManager.getUserComicHistoryHelper(context)
 
     companion object {
         private const val TAG = "UserComicHistoryController"
@@ -497,6 +497,55 @@ class UserComicHistoryController(private val context: Context) {
             false
         }
     }
+    
+    /**
+     * Get reading statistics for a user
+     * Returns a map with counts for total, reading, and completed comics
+     */
+    fun getUserReadingStatistics(userId: Int): ReadingStatistics {
+        val allHistory = dbHelper.getAllUserComicHistories(userId)
+        
+        // Reading: user has viewed at least one chapter but hasn't completed
+        val readingCount = allHistory.count { history ->
+            history.viewedChapters.isNotEmpty() && !history.isCompleted
+        }
+        
+        // Completed: user has marked comic as completed
+        val completedCount = allHistory.count { it.isCompleted }
+        
+        // Total: all comics the user has interacted with
+        val totalCount = allHistory.size
+        
+        return ReadingStatistics(
+            total = totalCount,
+            reading = readingCount,
+            completed = completedCount
+        )
+    }
+    
+    /**
+     * Get comics by reading status
+     */
+    fun getComicsByReadingStatus(userId: Int, status: ReadingStatus): List<Int> {
+        val allHistory = dbHelper.getAllUserComicHistories(userId)
+        
+        return when (status) {
+            ReadingStatus.READING -> {
+                // Comics with at least one chapter viewed but not completed
+                allHistory.filter { history ->
+                    history.viewedChapters.isNotEmpty() && !history.isCompleted
+                }.map { it.comicId }
+            }
+            ReadingStatus.COMPLETED -> {
+                // Comics marked as completed
+                allHistory.filter { it.isCompleted }.map { it.comicId }
+            }
+            ReadingStatus.ALL -> {
+                // All comics user has interacted with
+                allHistory.map { it.comicId }
+            }
+        }
+    }
 }
 
 /**
@@ -521,3 +570,21 @@ data class Achievement(
     val description: String,
     val dateEarned: Date = Date()
 )
+
+/**
+ * Data class for reading statistics
+ */
+data class ReadingStatistics(
+    val total: Int,
+    val reading: Int,
+    val completed: Int
+)
+
+/**
+ * Enum for reading status
+ */
+enum class ReadingStatus {
+    ALL,
+    READING,
+    COMPLETED
+}
