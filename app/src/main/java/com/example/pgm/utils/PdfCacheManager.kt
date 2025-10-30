@@ -55,14 +55,7 @@ class PdfCacheManager(private val context: Context) {
         val hash = url.md5()
         return File(cacheDir, "$hash.pdf")
     }
-    
-    /**
-     * Check if a URL is cached
-     */
-    fun isCached(url: String): Boolean {
-        return getCacheFile(url).exists()
-    }
-    
+
     /**
      * Get current cache size in bytes
      */
@@ -74,19 +67,7 @@ class PdfCacheManager(private val context: Context) {
             0L
         }
     }
-    
-    /**
-     * Get cache size in a human-readable format
-     */
-    fun getCacheSizeFormatted(): String {
-        val sizeBytes = getCacheSize()
-        return when {
-            sizeBytes < 1024 -> "$sizeBytes B"
-            sizeBytes < 1024 * 1024 -> "${sizeBytes / 1024} KB"
-            else -> "${sizeBytes / (1024 * 1024)} MB"
-        }
-    }
-    
+
     /**
      * Evict old files if cache size exceeds limit
      */
@@ -120,43 +101,14 @@ class PdfCacheManager(private val context: Context) {
             Log.e(TAG, "Error during eviction: ${e.message}", e)
         }
     }
-    
-    /**
-     * Clear entire cache
-     */
-    fun clearCache(): Boolean {
-        return try {
-            val deleted = cacheDir.listFiles()?.all { it.delete() } ?: true
-            Log.d(TAG, "Cache cleared: $deleted")
-            deleted
-        } catch (e: Exception) {
-            Log.e(TAG, "Error clearing cache: ${e.message}", e)
-            false
-        }
-    }
-    
+
     /**
      * Get number of cached files
      */
     fun getCacheFileCount(): Int {
         return cacheDir.listFiles()?.size ?: 0
     }
-    
-    /**
-     * Delete a specific cached file by URL
-     */
-    fun deleteCachedFile(url: String): Boolean {
-        return try {
-            val cacheFile = getCacheFile(url)
-            val deleted = cacheFile.delete()
-            Log.d(TAG, "Deleted cache for $url: $deleted")
-            deleted
-        } catch (e: Exception) {
-            Log.e(TAG, "Error deleting cached file: ${e.message}", e)
-            false
-        }
-    }
-    
+
     private fun String.md5(): String {
         val bytes = MessageDigest.getInstance("MD5").digest(this.toByteArray())
         return bytes.joinToString("") { "%02x".format(it) }
